@@ -16,7 +16,7 @@
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" ReadOnly="true"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -46,7 +46,7 @@
                         </td>
 
                         <td>
-                            <a asp-action="Remove" asp-route-id="@item.Name">Return</a>
+                            <a asp-action="Remove" asp-route-ModelID="@item.ID" asp-route-MakeID="@Model.ID">Return</a>
                         </td>
                     </tr>
                 }

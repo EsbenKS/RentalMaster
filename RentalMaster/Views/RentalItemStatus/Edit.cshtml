@@ -1,4 +1,4 @@
-﻿@model RentalMaster.Models.RentalItem
+﻿@model RentalMaster.Models.RentalItemStatus
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,7 +6,7 @@
 
 <h1>Edit</h1>
 
-<h4>RentalItem</h4>
+<h4>RentalItemStatus</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -15,20 +15,13 @@
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" ReadOnly="true" />
+                <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MakeID" class="control-label"></label>
-                <select asp-for="MakeID" class="form-control" asp-items="ViewBag.MakeID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModelID" class="control-label"></label>
-                <select asp-for="ModelID" class="form-control" asp-items="ViewBag.ModelID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="StatusID" class="control-label"></label>
-                <select asp-for="StatusID" class="form-control" asp-items="ViewBag.StatusID"></select>
+                <label asp-for="SortOrder" class="control-label"></label>
+                <input asp-for="SortOrder" class="form-control" />
+                <span asp-validation-for="SortOrder" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

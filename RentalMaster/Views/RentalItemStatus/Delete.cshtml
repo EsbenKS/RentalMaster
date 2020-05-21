@@ -1,4 +1,4 @@
-﻿@model RentalMaster.Models.RentalItem
+﻿@model RentalMaster.Models.RentalItemStatus
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,7 +8,7 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>RentalItem</h4>
+    <h4>RentalItemStatus</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -18,22 +18,10 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MakeID)
+            @Html.DisplayNameFor(model => model.SortOrder)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MakeID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModelID)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModelID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StatusID)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StatusID)
+            @Html.DisplayFor(model => model.SortOrder)
         </dd>
     </dl>
     

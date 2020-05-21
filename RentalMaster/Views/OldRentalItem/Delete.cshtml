@@ -17,23 +17,24 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
+
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MakeID)
+            @Html.DisplayNameFor(model => model.RentalItemMake)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MakeID)
-        </dd>
+            @Html.DisplayFor(model => model.RentalItemMake.ID)
+        </dd class>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModelID)
+            @Html.DisplayNameFor(model => model.RentalItemModel)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModelID)
-        </dd>
+            @Html.DisplayFor(model => model.RentalItemModel.ID)
+        </dd class>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StatusID)
+            @Html.DisplayNameFor(model => model.RentalItemStatus)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StatusID)
+            @Html.DisplayFor(model => model.RentalItemStatus.ID )
         </dd>
     </dl>
     

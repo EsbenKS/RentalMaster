@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,43 +11,45 @@ using RentalMaster.Repositories;
 
 namespace RentalMaster.Controllers
 {
-    public class RentalItemController : Controller
+    public class NewRentalItemController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        private readonly IRentalItemRepository _rentalItemRepository;
-        private readonly IRentalItemMakeRepository _rentalItemMakeRepository;
         private readonly IRentalItemModelRepository _rentalItemModelRepository;
+        private readonly IRentalItemMakeRepository _rentalItemMakeRepository;
         private readonly IRentalItemStatusRepository _rentalItemStatusRepository;
 
 
         public RentalItemController(ApplicationDbContext context,
-                                    IRentalItemRepository rentalItemRepository,
                                     IRentalItemModelRepository rentalItemModelRepository,
                                     IRentalItemStatusRepository rentalItemStatusRepository,
                                     IRentalItemMakeRepository rentalItemMakeRepository
                                     )
         {
             _context = context;
-            _rentalItemRepository = rentalItemRepository;
             _rentalItemModelRepository = rentalItemModelRepository;
             _rentalItemMakeRepository = rentalItemMakeRepository;
-            _rentalItemStatusRepository = rentalItemStatusRepository;
+             _rentalItemStatusRepository = rentalItemStatusRepository;
         }
         public async Task<IActionResult> Index()
         {
-           return View(_rentalItemRepository.GetAll());
+            var applicationDbContext = _context.RentalItems.Include(r => r.RentalItemMake).Include(r => r.RentalItemModel);
+            return View(await applicationDbContext.ToListAsync());
+            //return View(await _context.RentalItems.ToListAsync());
         }
 
-        // GET: RentalItem/Details/5
-        public async Task<IActionResult> Details(int  id)
+        // GET: NewRentalItem/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var rentalItem = _rentalItemRepository.GetByID(id);
+ var rentalItem = await _context.RentalItems
+                .Include(r => r.RentalItemMake)
+                .Include(r => r.RentalItemModel)
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (rentalItem == null)
             {
                 return NotFound();
@@ -57,47 +58,39 @@ namespace RentalMaster.Controllers
             return View(rentalItem);
         }
 
-        // GET: RentalItem/Create
+        // GET: NewRentalItem/Create
         public IActionResult Create()
         {
-            var rentalItem = new RentalItem();
-            var makeModelOptions = _rentalItemMakeRepository.MakeModelOptions();
-            rentalItem.MakeModelOptions = makeModelOptions.ToList(); 
-            ViewData["MakeModelID"] = new SelectList(makeModelOptions, "ID", "Name"); 
             ViewData["MakeID"] = new SelectList(_rentalItemMakeRepository.GetAll(), "ID", "Name");
             ViewData["ModelID"] = new SelectList(_rentalItemModelRepository.GetAll(), "ID", "Name");
             ViewData["StatusID"] = new SelectList(_rentalItemStatusRepository.GetAll(), "ID", "Name");
-
-            rentalItem.Name = RandomRentalItemName();
-            
+            var rentalItem = new RentalItem();
+            rentalItem.Name = RandomRentalItemName(); 
             return View(rentalItem);
-
+         
         }
 
-        // POST: RentalItem/Create
+        // POST: NewRentalItem/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,MakeID,ModelID,StatusID,MakeModelID")] RentalItem rentalItem)
+        public async Task<IActionResult> Create([Bind("ID,Name,MakeID,ModelID,StatusID")] RentalItem rentalItem)
         {
-
             if (ModelState.IsValid)
             {
-                var selectedModelMake = _context.MakeModelOptions.FirstOrDefault(p => p.ID == rentalItem.MakeModelID);
-                rentalItem.ModelID = selectedModelMake.ModelID;
-                rentalItem.MakeID = selectedModelMake.MakeID;
                 _context.Add(rentalItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MakeModelID"] = new SelectList(_rentalItemMakeRepository.MakeModelOptions(), "ID", "Name", rentalItem.MakeModelID);
             ViewData["MakeID"] = new SelectList(_rentalItemMakeRepository.GetAll(), "ID", "Name", rentalItem.MakeID);
             ViewData["ModelID"] = new SelectList(_rentalItemModelRepository.GetAll(), "ID", "Name", rentalItem.ModelID);
             ViewData["StatusID"] = new SelectList(_rentalItemStatusRepository.GetAll(), "ID", "Name", rentalItem.StatusID);
             return View(rentalItem);
         }
 
-        // GET: RentalItem/Edit/5
-        public async Task<IActionResult> Edit(int  id)
+        // GET: NewRentalItem/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -110,12 +103,14 @@ namespace RentalMaster.Controllers
                 return NotFound();
             }
             ViewData["StatusID"] = new SelectList(_rentalItemModelRepository.GetAll(), "ID", "Name", rentalItem.StatusID);
-            ViewData["MakeID"] = new SelectList(_rentalItemMakeRepository.GetAll(), "ID", "Name", rentalItem.MakeID);
-            ViewData["ModelID"] = new SelectList(_rentalItemStatusRepository.GetAll(), "ID", "Name", rentalItem.ModelID);
+            ViewData["MakeID"]     = new SelectList(_rentalItemMakeRepository.GetAll(), "ID", "Name", rentalItem.MakeID);
+            ViewData["ModelID"]    = new SelectList(_rentalItemStatusRepository.GetAll(), "ID", "Name", rentalItem.ModelID);
             return View(rentalItem);
         }
 
-        // POST: RentalItem/Edit/5
+        // POST: NewRentalItem/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Name,MakeID,ModelID,StatusID")] RentalItem rentalItem)
@@ -151,10 +146,18 @@ namespace RentalMaster.Controllers
             return View(rentalItem);
         }
 
-        // GET: RentalItem/Delete/5
-        public async Task<IActionResult> Delete(int  id)
+        // GET: NewRentalItem/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
-            var rentalItem = _rentalItemRepository.GetByID(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var rentalItem = await _context.RentalItems
+            .Include(r => r.RentalItemMake)
+                .Include(r => r.RentalItemModel)
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (rentalItem == null)
             {
                 return NotFound();
@@ -163,12 +166,12 @@ namespace RentalMaster.Controllers
             return View(rentalItem);
         }
 
-        // POST: RentalItem/Delete/5
+        // POST: NewRentalItem/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var rentalItem = _rentalItemRepository.GetByID(id);
+            var rentalItem = await _context.RentalItems.FindAsync(id);
             _context.RentalItems.Remove(rentalItem);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -193,7 +196,6 @@ namespace RentalMaster.Controllers
             {
                 result.Append(numbers[r.Next(numbers.Length)]);
             }
-            
             return result.ToString();
         }
     }

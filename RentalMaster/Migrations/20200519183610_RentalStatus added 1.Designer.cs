@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentalMaster.Data;
 
 namespace RentalMaster.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200519183610_RentalStatus added 1")]
+    partial class RentalStatusadded1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,37 +221,6 @@ namespace RentalMaster.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("RentalMaster.Models.MakeModelOption", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("MakeID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ModelID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("RentalItemMakeID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RentalItemModelID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("RentalItemMakeID");
-
-                    b.HasIndex("RentalItemModelID");
-
-                    b.ToTable("MakeModelOptions");
-                });
-
             modelBuilder.Entity("RentalMaster.Models.RentalItem", b =>
                 {
                     b.Property<int>("ID")
@@ -272,9 +243,6 @@ namespace RentalMaster.Migrations
                     b.Property<int?>("RentalItemModelID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RentalItemStatusID")
-                        .HasColumnType("int");
-
                     b.Property<int>("StatusID")
                         .HasColumnType("int");
 
@@ -284,7 +252,7 @@ namespace RentalMaster.Migrations
 
                     b.HasIndex("RentalItemModelID");
 
-                    b.HasIndex("RentalItemStatusID");
+                    b.HasIndex("StatusID");
 
                     b.ToTable("RentalItems");
                 });
@@ -342,7 +310,7 @@ namespace RentalMaster.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("RentalItemStatus");
+                    b.ToTable("RentalItemStatuses");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -396,17 +364,6 @@ namespace RentalMaster.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RentalMaster.Models.MakeModelOption", b =>
-                {
-                    b.HasOne("RentalMaster.Models.RentalItemMake", "RentalItemMake")
-                        .WithMany()
-                        .HasForeignKey("RentalItemMakeID");
-
-                    b.HasOne("RentalMaster.Models.RentalItemModel", "RentalItemModel")
-                        .WithMany()
-                        .HasForeignKey("RentalItemModelID");
-                });
-
             modelBuilder.Entity("RentalMaster.Models.RentalItem", b =>
                 {
                     b.HasOne("RentalMaster.Models.RentalItemMake", "RentalItemMake")
@@ -417,9 +374,11 @@ namespace RentalMaster.Migrations
                         .WithMany()
                         .HasForeignKey("RentalItemModelID");
 
-                    b.HasOne("RentalMaster.Models.RentalItemStatus", "RentalItemStatus")
+                    b.HasOne("RentalMaster.Models.RentalItemStatus", "Status")
                         .WithMany()
-                        .HasForeignKey("RentalItemStatusID");
+                        .HasForeignKey("StatusID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RentalMaster.Models.RentalItemModel", b =>

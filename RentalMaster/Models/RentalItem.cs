@@ -14,25 +14,23 @@ namespace RentalMaster.Models
         public int ID { get; set; }
         public string Name { get; set; }
 
-        public int CategoryID { get; set; }
-        public RentalItemCategory RentalItemCategory { get; set; }
-
-        
+      
         public int MakeID { get; set; }
         public RentalItemMake RentalItemMake { get; set; }
 
         public int ModelID { get; set; }
         public RentalItemModel RentalItemModel { get; set; }
 
-        public RentalItemStatus Status { get; set; }
-       
-    }
- 
+        public int StatusID { get; set; }
+        public RentalItemStatus RentalItemStatus { get; set; }
 
-    public enum RentalItemStatus
-    {
-        Ready,
-        Repair,
-        NotAvailable
+
+        [NotMapped]
+        public int MakeModelID { get; set; }
+        [NotMapped]
+        public MakeModelOption MakeModelOption { get; set; }
+        [NotMapped]
+        public List<MakeModelOption> MakeModelOptions { get; set; }
+
     }
 }

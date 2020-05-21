@@ -22,6 +22,8 @@ namespace RentalMaster.Repositories
                                 .Include(r => r.RentalItemModels)
                                 .AsNoTracking()
                                 .OrderBy(c => c.Name);
+            
+     
       
         }
         public RentalItemMake GetByID(int RentalItemMakeId)
@@ -49,16 +51,37 @@ namespace RentalMaster.Repositories
                                 .AsNoTracking()
                                 .ToList();       
         }
-        public IEnumerable<RentalItemCategory> GetAllWhereUsed(RentalItemMake rentalItemMake)
+
+        public IEnumerable<MakeModelOption> MakeModelOptions()
         {
-            return _appDbContext
-                                .RentalItemCategories
-                                .Include(r => r.RentalItemMakes)
+            // Delete current MakeModelOptions
+            _appDbContext.MakeModelOptions.RemoveRange(_appDbContext.MakeModelOptions);
+            _appDbContext.SaveChanges();
+     
+
+            var NewMakeModelOptions = new List<MakeModelOption>(); 
+
+            var makes = GetAllAsList();
+            foreach (var make in makes)
+            {
+                foreach (var model in make.RentalItemModels)
+                {
+                    var MakeModel = new MakeModelOption();
+                    MakeModel.MakeID = make.ID;
+                    MakeModel.ModelID = model.ID;
+                    //MakeModel.RentalItemMake = make;
+                    //MakeModel.RentalItemModel = model;
+                    MakeModel.Name = make.Name + ' ' + model.Name;
+                    _appDbContext.MakeModelOptions.Add(MakeModel);
+                }
+            }
+            // Add new MakeModelOptions
+            _appDbContext.SaveChanges();
+
+
+            return _appDbContext.MakeModelOptions
                                 .AsNoTracking()
-                                .Where(x => x.RentalItemMakes.Any(x => x.ID == rentalItemMake.ID))
-                                .OrderBy(o => o.Name);
-
+                                .OrderBy(c => c.Name).ToList(); 
         }
-
     }
 }

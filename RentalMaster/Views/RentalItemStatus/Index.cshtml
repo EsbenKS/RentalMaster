@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RentalMaster.Models.RentalItem>
+﻿@model IEnumerable<RentalMaster.Models.RentalItemStatus>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,13 +16,7 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RentalItemMake.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RentalItemModel.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RentalItemStatus.Name)
+                @Html.DisplayNameFor(model => model.SortOrder)
             </th>
             <th></th>
         </tr>
@@ -34,13 +28,7 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RentalItemMake.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RentalItemModel.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RentalItemStatus.Name)
+                @Html.DisplayFor(modelItem => item.SortOrder)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using RentalMaster.Data;
 using RentalMaster.Models;
 using RentalMaster.Repositories;
+using RentalMaster.ViewModel;
 
 namespace RentalMaster.Controllers
 {
@@ -53,8 +54,7 @@ namespace RentalMaster.Controllers
         }
 
         // POST: RentalItemMake/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Name")] RentalItemMake rentalItemMake)
@@ -97,6 +97,9 @@ namespace RentalMaster.Controllers
             {
                 //// Find selected Model from the dropdown 
                 var selectedModel = _rentalItemModelRepository.GetByID(rentalItemMake.RentalItemModelID);
+                selectedModel.MakeID = id;
+                _context.Update(selectedModel);
+                await _context.SaveChangesAsync();
 
                 // Get current make, with models. 
                 rentalItemMake = _rentalItemMakeRepository.GetByID(id); 
@@ -170,6 +173,49 @@ namespace RentalMaster.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        // GET: RentalItemMake/Remove/5
+        public async Task<IActionResult> Remove(int ModelID, int MakeID)
+        {
+            var removeVM = new RemoveModelVM(); 
+
+            var rentalItemMake = _rentalItemMakeRepository.GetByID(MakeID);
+            var rentalItemModel = _rentalItemModelRepository.GetByID(ModelID);
+
+       
+            
+            if (rentalItemMake == null)
+            {
+                return NotFound();
+            }
+            removeVM.MakeID = MakeID;
+            removeVM.MakeName = rentalItemMake.Name;
+            removeVM.ModelID = ModelID;
+            removeVM.ModelName = rentalItemModel.Name;
+            return View(removeVM);
+        }
+
+        // POST: RentalItemMake/Remove/5
+        [HttpPost, ActionName("Remove")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveConfirmed(RemoveModelVM removeVM)
+        {
+            var MakeID = removeVM.MakeID;
+            var modelID = removeVM.ModelID;
+            
+            var rentalItemMake = _rentalItemMakeRepository.GetByID(MakeID);
+            var rentalItemModel = _rentalItemModelRepository.GetByID(modelID);
+
+            if (rentalItemMake.RentalItemModels != null)
+            {
+                  rentalItemMake.RentalItemModels.RemoveAll(x => x.ID == modelID);
+
+                _context.RentalItemMakes.Update(rentalItemMake);
+                await _context.SaveChangesAsync();
+            }
+
+           return RedirectToAction(nameof(Index));
+        }
+
 
         private bool RentalItemMakeExists(int id)
         {

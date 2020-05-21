@@ -15,18 +15,11 @@ namespace RentalMaster.Data
         {
         }
         public DbSet<RentalItem> RentalItems { get; set; }
-        public DbSet<RentalItemCategory> RentalItemCategories { get; set; }
         public DbSet<RentalItemMake> RentalItemMakes { get; set; }
         public DbSet<RentalItemModel> RentalItemModels { get; set; }
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    base.OnModelCreating(modelBuilder);
+        public DbSet<MakeModelOption> MakeModelOptions { get; set; }
 
-        //    modelBuilder.Entity<RentalItemMake>()
-        //        .HasOptional(a => a.RentalItemModel)
-        //        .WithOptionalDependent()
-        //        .WillCascadeOnDelete(true);
-        //}
+ 
 
 
     }

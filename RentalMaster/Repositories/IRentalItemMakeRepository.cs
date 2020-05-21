@@ -12,7 +12,7 @@ namespace RentalMaster.Repositories
         RentalItemMake GetByID(int RentalItemMakeID);
         List<RentalItemMake> GetAllAsList();
         RentalItemMake GetByName(string name);
-        IEnumerable<RentalItemCategory> GetAllWhereUsed(RentalItemMake rentalItemMake);
+        IEnumerable<MakeModelOption> MakeModelOptions();
 
     }
 }

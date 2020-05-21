@@ -31,13 +31,15 @@ namespace RentalMaster
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
-            services.AddTransient<IRentalItemCategoryRepository, RentalItemCategoryRepository>();
+            // Repositories
+            services.AddTransient<IRentalItemRepository, RentalItemRepository>();
             services.AddTransient<IRentalItemModelRepository, RentalItemModelRepository>();
             services.AddTransient<IRentalItemMakeRepository, RentalItemMakeRepository>();
+            services.AddTransient<IRentalItemStatusRepository, RentalItemStatusRepository>();
 
 
             services.AddControllersWithViews();
