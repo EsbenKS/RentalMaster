@@ -43,10 +43,7 @@ namespace RentalMaster.Controllers
         // GET: RentalItem/Details/5
         public async Task<IActionResult> Details(int  id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+ 
 
             var rentalItem = _rentalItemRepository.GetByID(id);
             if (rentalItem == null)
@@ -64,8 +61,6 @@ namespace RentalMaster.Controllers
             var makeModelOptions = _rentalItemMakeRepository.MakeModelOptions();
             rentalItem.MakeModelOptions = makeModelOptions.ToList(); 
             ViewData["MakeModelID"] = new SelectList(makeModelOptions, "ID", "Name"); 
-            ViewData["MakeID"] = new SelectList(_rentalItemMakeRepository.GetAll(), "ID", "Name");
-            ViewData["ModelID"] = new SelectList(_rentalItemModelRepository.GetAll(), "ID", "Name");
             ViewData["StatusID"] = new SelectList(_rentalItemStatusRepository.GetAll(), "ID", "Name");
 
             rentalItem.Name = RandomRentalItemName();
@@ -79,7 +74,6 @@ namespace RentalMaster.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Name,MakeID,ModelID,StatusID,MakeModelID")] RentalItem rentalItem)
         {
-
             if (ModelState.IsValid)
             {
                 var selectedModelMake = _context.MakeModelOptions.FirstOrDefault(p => p.ID == rentalItem.MakeModelID);
@@ -90,8 +84,6 @@ namespace RentalMaster.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["MakeModelID"] = new SelectList(_rentalItemMakeRepository.MakeModelOptions(), "ID", "Name", rentalItem.MakeModelID);
-            ViewData["MakeID"] = new SelectList(_rentalItemMakeRepository.GetAll(), "ID", "Name", rentalItem.MakeID);
-            ViewData["ModelID"] = new SelectList(_rentalItemModelRepository.GetAll(), "ID", "Name", rentalItem.ModelID);
             ViewData["StatusID"] = new SelectList(_rentalItemStatusRepository.GetAll(), "ID", "Name", rentalItem.StatusID);
             return View(rentalItem);
         }
@@ -99,19 +91,14 @@ namespace RentalMaster.Controllers
         // GET: RentalItem/Edit/5
         public async Task<IActionResult> Edit(int  id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var rentalItem = await _context.RentalItems.FindAsync(id);
             if (rentalItem == null)
             {
                 return NotFound();
             }
-            ViewData["StatusID"] = new SelectList(_rentalItemModelRepository.GetAll(), "ID", "Name", rentalItem.StatusID);
             ViewData["MakeID"] = new SelectList(_rentalItemMakeRepository.GetAll(), "ID", "Name", rentalItem.MakeID);
-            ViewData["ModelID"] = new SelectList(_rentalItemStatusRepository.GetAll(), "ID", "Name", rentalItem.ModelID);
+            ViewData["ModelID"] = new SelectList(_rentalItemModelRepository.GetAll(), "ID", "Name", rentalItem.ModelID);
+            ViewData["StatusID"] = new SelectList(_rentalItemStatusRepository.GetAll(), "ID", "Name", rentalItem.StatusID);
             return View(rentalItem);
         }
 
@@ -124,7 +111,18 @@ namespace RentalMaster.Controllers
             {
                 return NotFound();
             }
+            ViewData["StatusID"] = new SelectList(_rentalItemStatusRepository.GetAll(), "ID", "Name", rentalItem.StatusID);
+            ViewData["MakeID"] = new SelectList(_rentalItemMakeRepository.GetAll(), "ID", "Name", rentalItem.MakeID);
+            ViewData["ModelID"] = new SelectList(_rentalItemModelRepository.GetAll(), "ID", "Name", rentalItem.ModelID);
 
+            var make = _rentalItemMakeRepository.GetByID(rentalItem.MakeID);
+            if (!make.RentalItemModels.Any(x => x.ID == rentalItem.ModelID))
+            {
+                var model = _rentalItemModelRepository.GetByID(rentalItem.ModelID);
+
+                ModelState.AddModelError(string.Empty, "Model: " + model.Name + " is not valid for this make");
+                return View(rentalItem);
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -145,9 +143,9 @@ namespace RentalMaster.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StatusID"] = new SelectList(_rentalItemModelRepository.GetAll(), "ID", "Name", rentalItem.StatusID);
+            ViewData["StatusID"] = new SelectList(_rentalItemStatusRepository.GetAll(), "ID", "Name", rentalItem.StatusID);
             ViewData["MakeID"] = new SelectList(_rentalItemMakeRepository.GetAll(), "ID", "Name", rentalItem.MakeID);
-            ViewData["ModelID"] = new SelectList(_rentalItemStatusRepository.GetAll(), "ID", "Name", rentalItem.ModelID);
+            ViewData["ModelID"] = new SelectList(_rentalItemModelRepository.GetAll(), "ID", "Name", rentalItem.ModelID);
             return View(rentalItem);
         }
 

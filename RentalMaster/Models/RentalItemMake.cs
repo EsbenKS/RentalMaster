@@ -10,7 +10,11 @@ namespace RentalMaster.Models
     public class RentalItemMake
     {
         [Key]
+        [Display(Name = "Make ID")]
+
         public int ID { get; set; }
+        [Display(Name = "Make Name")]
+
         public string Name { get; set; }
         public List<RentalItemModel> RentalItemModels { get; set; }
         [NotMapped]

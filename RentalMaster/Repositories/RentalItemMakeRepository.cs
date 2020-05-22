@@ -54,10 +54,10 @@ namespace RentalMaster.Repositories
 
         public IEnumerable<MakeModelOption> MakeModelOptions()
         {
-            // Delete current MakeModelOptions
-            _appDbContext.MakeModelOptions.RemoveRange(_appDbContext.MakeModelOptions);
-            _appDbContext.SaveChanges();
-     
+   
+
+            //Truncate Table to delete all old records, and reset the id coloum..
+            _appDbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [MakeModelOptions]");
 
             var NewMakeModelOptions = new List<MakeModelOption>(); 
 
@@ -69,8 +69,6 @@ namespace RentalMaster.Repositories
                     var MakeModel = new MakeModelOption();
                     MakeModel.MakeID = make.ID;
                     MakeModel.ModelID = model.ID;
-                    //MakeModel.RentalItemMake = make;
-                    //MakeModel.RentalItemModel = model;
                     MakeModel.Name = make.Name + ' ' + model.Name;
                     _appDbContext.MakeModelOptions.Add(MakeModel);
                 }

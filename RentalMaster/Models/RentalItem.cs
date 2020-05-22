@@ -14,13 +14,15 @@ namespace RentalMaster.Models
         public int ID { get; set; }
         public string Name { get; set; }
 
-      
+        [Display(Name = "Make")]
         public int MakeID { get; set; }
         public RentalItemMake RentalItemMake { get; set; }
 
+        [Display(Name = "Model")]
         public int ModelID { get; set; }
         public RentalItemModel RentalItemModel { get; set; }
 
+        [Display(Name = "Status")]
         public int StatusID { get; set; }
         public RentalItemStatus RentalItemStatus { get; set; }
 

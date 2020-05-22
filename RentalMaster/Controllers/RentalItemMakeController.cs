@@ -111,7 +111,7 @@ namespace RentalMaster.Controllers
                 // is this model already added to this make? 
                 if (rentalItemMake.RentalItemModels.Any(x => x.ID == selectedModel.ID))
                 {
-                    ModelState.AddModelError(string.Empty, "Model: " + selectedModel.Name + "is already added");
+                    ModelState.AddModelError(string.Empty, "Model: " + selectedModel.Name + " is already added");
                     return View(rentalItemMake);
                 }
 

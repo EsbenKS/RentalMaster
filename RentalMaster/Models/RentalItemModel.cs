@@ -10,7 +10,9 @@ namespace RentalMaster.Models
     public class RentalItemModel
     {
         [Key]
+        [Display(Name = "Model ID")]
         public int ID { get; set; }
+        [Display(Name = "Model Name")]
         public string Name { get; set; }
        
         [ForeignKey("RentalItemMake")]

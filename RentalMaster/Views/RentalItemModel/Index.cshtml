@@ -1,13 +1,21 @@
 ﻿@model IEnumerable<RentalMaster.Models.RentalItemModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Models";
 }
 
-<h1>Index</h1>
+<h1>Models</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+
+    <th>
+        <a asp-action="Create" class="text-center btn btn-outline-success"><i class="far fa-plus-square"></i>Create New Model</a>
+    </th>
+
+    <th>
+        <a asp-controller="RentalItemMake" asp-action="Index" class="btn btn-outline-success"><i class="far fa-plus-square"></i> Makes </a>
+    </th>
+
 </p>
 <table class="table">
     <thead>
