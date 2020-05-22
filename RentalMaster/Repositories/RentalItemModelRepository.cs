@@ -43,17 +43,24 @@ namespace RentalMaster.Repositories
                                 .RentalItemModels
                                 .AsNoTracking()
                                 .OrderBy(c => c.Name)
-                                .ToList();                
+                                .ToList();
         }
-        public IEnumerable<RentalItemMake> GetAllWhereUsed(RentalItemModel rentalItemModel)
+        public IEnumerable<RentalItemMake> GetAllWhereUsed(int ModelID)
         {
             return _appDbContext
                                 .RentalItemMakes
                                 .Include(r => r.RentalItemModels)
                                 .AsNoTracking()
-                                .Where(x => x.RentalItemModels.Any(x => x.ID == rentalItemModel.ID))
+                                .Where(x => x.RentalItemModels.Any(x => x.ID == ModelID))
                                 .OrderBy(o => o.Name);
 
         }
-    }
+        public bool isModelInUse(int ModelID)
+        {
+            // If you don't just want to know if it in use, but not where.  
+            return (GetAllWhereUsed(ModelID).Count() > 0);
+        }
+
+
+    }    
 }

@@ -136,7 +136,7 @@ namespace RentalMaster.Controllers
             var rentalItemModel = _rentalItemModelRepository.GetByID(id);
 
 
-            if (_rentalItemModelRepository.GetAllWhereUsed(rentalItemModel).Count() > 0)
+            if (_rentalItemModelRepository.isModelInUse(id))
             {
 
                 ModelState.AddModelError(string.Empty, "Model is in use. Can't be deleted");

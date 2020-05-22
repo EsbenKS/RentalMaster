@@ -13,7 +13,7 @@ namespace RentalMaster.Models
         [Display(Name = "Make ID")]
 
         public int ID { get; set; }
-        [Display(Name = "Make Name")]
+        [Display(Name = "Make")]
 
         public string Name { get; set; }
         public List<RentalItemModel> RentalItemModels { get; set; }

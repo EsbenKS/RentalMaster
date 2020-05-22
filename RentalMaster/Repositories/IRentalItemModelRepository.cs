@@ -12,6 +12,7 @@ namespace RentalMaster.Repositories
         RentalItemModel GetByID(int RentalItemModelID);
         List<RentalItemModel> GetAllAsList();
         RentalItemModel GetByName(string name);
-        IEnumerable<RentalItemMake> GetAllWhereUsed(RentalItemModel rentalItemModel);
+        IEnumerable<RentalItemMake> GetAllWhereUsed(int ModelID);
+        bool isModelInUse(int ModelID);
     }
 }

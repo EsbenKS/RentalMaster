@@ -144,6 +144,13 @@ namespace RentalMaster.Controllers
         {
    
             var rentalItemMake = _rentalItemMakeRepository.GetByID(id);
+            if (_rentalItemMakeRepository.isMakeInUse(id))
+            {
+
+                ModelState.AddModelError(string.Empty, "Make is in use. Can't be deleted");
+                return View(rentalItemMake);
+
+            }
             if (rentalItemMake == null)
             {
                 return NotFound();
@@ -159,6 +166,13 @@ namespace RentalMaster.Controllers
         {
             var rentalItemMake = _rentalItemMakeRepository.GetByID(id);
 
+            if (_rentalItemMakeRepository.isMakeInUse(id))
+            {
+
+                ModelState.AddModelError(string.Empty, "Make is in use. Can't be deleted");
+                return View(rentalItemMake);
+
+            }
             // First remove any models connected to this make. 
             if (rentalItemMake.RentalItemModels != null)
             { 

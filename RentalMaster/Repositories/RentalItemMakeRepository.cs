@@ -56,7 +56,7 @@ namespace RentalMaster.Repositories
         {
    
 
-            //Truncate Table to delete all old records, and reset the id coloum..
+            //Truncate Table to delete all old records, and reset the id colum..
             _appDbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [MakeModelOptions]");
 
             var NewMakeModelOptions = new List<MakeModelOption>(); 
@@ -80,6 +80,20 @@ namespace RentalMaster.Repositories
             return _appDbContext.MakeModelOptions
                                 .AsNoTracking()
                                 .OrderBy(c => c.Name).ToList(); 
+        }
+        public IEnumerable<RentalItem> GetAllWhereUsed(int id)
+        {
+            return _appDbContext
+                    .RentalItems
+                    .AsNoTracking()
+                    .Where(x => x.MakeID == id)
+                    .OrderBy(o => o.Name);
+        }
+
+        public bool isMakeInUse(int ModelID)
+        {
+            // If you don't just want to know if it in use, but not where.  
+            return (GetAllWhereUsed(ModelID).Count() > 0);
         }
     }
 }

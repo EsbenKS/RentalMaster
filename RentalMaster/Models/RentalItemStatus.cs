@@ -10,7 +10,7 @@ namespace RentalMaster.Models
     {
         [Display(Name = "Status ID")]
         public int ID { get; set; }
-        [Display(Name = "Status Name")]
+        [Display(Name = "Status")]
         public string Name { get; set; }
         [Display(Name = "Sort Order")]
         public int SortOrder { get; set; }
