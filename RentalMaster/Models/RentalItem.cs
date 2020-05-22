@@ -10,8 +10,9 @@ namespace RentalMaster.Models
 {
     public class RentalItem
     {
-        [Key] 
+        [Key]
         public int ID { get; set; }
+        [StringLength(100, MinimumLength = 2)]
         public string Name { get; set; }
 
         [Display(Name = "Make")]
@@ -26,6 +27,8 @@ namespace RentalMaster.Models
         public int StatusID { get; set; }
         public RentalItemStatus RentalItemStatus { get; set; }
 
+        public ICollection<RentalAgreement> RentalAgreements { get; set; }
+
 
         [NotMapped]
         public int MakeModelID { get; set; }
@@ -33,6 +36,15 @@ namespace RentalMaster.Models
         public MakeModelOption MakeModelOption { get; set; }
         [NotMapped]
         public List<MakeModelOption> MakeModelOptions { get; set; }
+
+        [NotMapped]
+        public string NameMakeModel
+        {
+            get
+            {
+                return Name; // + " - " + RentalItemMake.Name + " " + RentalItemModel.Name;
+            }
+        }
 
     }
 }

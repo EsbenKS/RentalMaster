@@ -23,8 +23,6 @@ namespace RentalMaster.Repositories
                                 .AsNoTracking()
                                 .OrderBy(c => c.Name);
             
-     
-      
         }
         public RentalItemMake GetByID(int RentalItemMakeId)
         {

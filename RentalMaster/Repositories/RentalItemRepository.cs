@@ -30,15 +30,12 @@ namespace RentalMaster.Repositories
                                    .Include(r => r.RentalItemModel)
                                    .Include(r => r.RentalItemStatus)
                                    .AsNoTracking()
-                                   .OrderBy(c => c.Name)
-                                   .ToList();
-
-
+                                   .OrderBy(c => c.Name).ToList(); 
+                                 
             foreach (var item in AllItems)
             {
                 // Include the objects in the RentalItem. 
                 item.RentalItemMake = _rentalItemMakeRepository.GetByID(item.MakeID);
-                if (item.RentalItemMake.Name == null) Console.ReadLine(); 
                 item.RentalItemModel = _rentalItemModelRepository.GetByID(item.ModelID);
                 item.RentalItemStatus = _rentalItemStatusRepository.GetByID(item.StatusID);
             }

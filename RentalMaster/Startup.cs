@@ -40,6 +40,7 @@ namespace RentalMaster
             services.AddTransient<IRentalItemModelRepository, RentalItemModelRepository>();
             services.AddTransient<IRentalItemMakeRepository, RentalItemMakeRepository>();
             services.AddTransient<IRentalItemStatusRepository, RentalItemStatusRepository>();
+            services.AddTransient<ICustomerRepository, CustomerRepository>();
 
 
             services.AddControllersWithViews();
@@ -72,7 +73,7 @@ namespace RentalMaster
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=RentalItem}/{action=Index}/{id?}");
+                    pattern: "{controller=RentalAgreement}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

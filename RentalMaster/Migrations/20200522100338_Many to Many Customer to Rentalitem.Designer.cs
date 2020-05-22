@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentalMaster.Data;
 
 namespace RentalMaster.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200522100338_Many to Many Customer to Rentalitem")]
+    partial class ManytoManyCustomertoRentalitem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -289,17 +291,8 @@ namespace RentalMaster.Migrations
                     b.Property<int>("CustomerID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("RentalEndDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("RentalItemID")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("RentalReturnedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("RentalStartDate")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("ID");
 

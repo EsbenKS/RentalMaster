@@ -18,6 +18,9 @@ namespace RentalMaster.Data
         public DbSet<RentalItemMake> RentalItemMakes { get; set; }
         public DbSet<RentalItemModel> RentalItemModels { get; set; }
         public DbSet<MakeModelOption> MakeModelOptions { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<RentalAgreement> RentalAgreements { get; set; }
+        
 
  
 

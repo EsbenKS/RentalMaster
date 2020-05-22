@@ -14,7 +14,7 @@ namespace RentalMaster.Models
 
         public int ID { get; set; }
         [Display(Name = "Make")]
-
+        [StringLength(100, MinimumLength = 2)]
         public string Name { get; set; }
         public List<RentalItemModel> RentalItemModels { get; set; }
         [NotMapped]

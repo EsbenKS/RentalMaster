@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentalMaster.Data;
 
 namespace RentalMaster.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200522094450_Display Limit")]
+    partial class DisplayLimit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,45 +221,6 @@ namespace RentalMaster.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("RentalMaster.Models.Customer", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Adresse1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(75)")
-                        .HasMaxLength(75);
-
-                    b.Property<string>("Adresse2")
-                        .HasColumnType("nvarchar(75)")
-                        .HasMaxLength(75);
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("PostArea")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(20)")
-                        .HasMaxLength(20);
-
-                    b.Property<int>("ZipCode")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Customers");
-                });
-
             modelBuilder.Entity("RentalMaster.Models.MakeModelOption", b =>
                 {
                     b.Property<int>("ID")
@@ -277,37 +240,6 @@ namespace RentalMaster.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("MakeModelOptions");
-                });
-
-            modelBuilder.Entity("RentalMaster.Models.RentalAgreement", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CustomerID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("RentalEndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("RentalItemID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("RentalReturnedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("RentalStartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("CustomerID");
-
-                    b.HasIndex("RentalItemID");
-
-                    b.ToTable("RentalAgreements");
                 });
 
             modelBuilder.Entity("RentalMaster.Models.RentalItem", b =>
@@ -455,21 +387,6 @@ namespace RentalMaster.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("RentalMaster.Models.RentalAgreement", b =>
-                {
-                    b.HasOne("RentalMaster.Models.Customer", "Customer")
-                        .WithMany("RentalAgreements")
-                        .HasForeignKey("CustomerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RentalMaster.Models.RentalItem", "RentalItem")
-                        .WithMany("RentalAgreements")
-                        .HasForeignKey("RentalItemID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

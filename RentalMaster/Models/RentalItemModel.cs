@@ -13,6 +13,7 @@ namespace RentalMaster.Models
         [Display(Name = "Model ID")]
         public int ID { get; set; }
         [Display(Name = "Model")]
+        [StringLength(100, MinimumLength = 2)]
         public string Name { get; set; }
        
         [ForeignKey("RentalItemMake")]
