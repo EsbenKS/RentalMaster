@@ -20,47 +20,39 @@ namespace RentalMaster.Controllers
         private readonly IRentalItemMakeRepository _rentalItemMakeRepository;
         private readonly IRentalItemModelRepository _rentalItemModelRepository;
         private readonly IRentalItemStatusRepository _rentalItemStatusRepository;
+        private readonly IMakeModelOptionRepository _makeModelOptionRepository;
+
 
 
         public RentalItemController(ApplicationDbContext context,
                                     IRentalItemRepository rentalItemRepository,
                                     IRentalItemModelRepository rentalItemModelRepository,
                                     IRentalItemStatusRepository rentalItemStatusRepository,
-                                    IRentalItemMakeRepository rentalItemMakeRepository
-                                    )
+                                    IRentalItemMakeRepository rentalItemMakeRepository,
+                                    IMakeModelOptionRepository makeModelOptionRepository)
         {
             _context = context;
             _rentalItemRepository = rentalItemRepository;
             _rentalItemModelRepository = rentalItemModelRepository;
             _rentalItemMakeRepository = rentalItemMakeRepository;
             _rentalItemStatusRepository = rentalItemStatusRepository;
+            _makeModelOptionRepository = makeModelOptionRepository;
         }
         public async Task<IActionResult> Index()
         {
            return View(_rentalItemRepository.GetAll());
         }
 
-        // GET: RentalItem/Details/5
-        public async Task<IActionResult> Details(int  id)
-        {
- 
-
-            var rentalItem = _rentalItemRepository.GetByID(id);
-            if (rentalItem == null)
-            {
-                return NotFound();
-            }
-
-            return View(rentalItem);
-        }
 
         // GET: RentalItem/Create
         public IActionResult Create()
         {
+            // Generate MakeModel Options 
+            _makeModelOptionRepository.GenerateMakeModelOptions();
+
             var rentalItem = new RentalItem();
-            var makeModelOptions = _rentalItemMakeRepository.MakeModelOptions();
-            rentalItem.MakeModelOptions = makeModelOptions.ToList(); 
-            ViewData["MakeModelID"] = new SelectList(makeModelOptions, "ID", "Name"); 
+
+            ViewData["MakeModelID"] = new SelectList(_makeModelOptionRepository.GetAll(), "ID", "Name");
             ViewData["StatusID"] = new SelectList(_rentalItemStatusRepository.GetAll(), "ID", "Name");
 
             rentalItem.Name = RandomRentalItemName();
@@ -72,18 +64,27 @@ namespace RentalMaster.Controllers
         // POST: RentalItem/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,MakeID,ModelID,StatusID,MakeModelID")] RentalItem rentalItem)
+       //public async Task<IActionResult> Create([Bind("ID,Name,MakeID,ModelID,StatusID,MakeModelID")] RentalItem rentalItem)
+       public async Task<IActionResult> Create(RentalItem rentalItem)
         {
             if (ModelState.IsValid)
             {
-                var selectedModelMake = _context.MakeModelOptions.FirstOrDefault(p => p.ID == rentalItem.MakeModelID);
+                var selectedModelMake = _makeModelOptionRepository.GetByID(rentalItem.MakeModelID);
+
+                // Keys
                 rentalItem.ModelID = selectedModelMake.ModelID;
                 rentalItem.MakeID = selectedModelMake.MakeID;
-                _context.Add(rentalItem);
+                rentalItem.StatusID = rentalItem.StatusID;
+                rentalItem.RentalItemModel = _rentalItemModelRepository.GetByID(rentalItem.ModelID);
+                rentalItem.RentalItemMake = _rentalItemMakeRepository.GetByID(rentalItem.MakeID);
+                rentalItem.RentalItemStatus = _rentalItemStatusRepository.GetByID(rentalItem.StatusID);
+
+                _context.RentalItems.Add(rentalItem);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MakeModelID"] = new SelectList(_rentalItemMakeRepository.MakeModelOptions(), "ID", "Name", rentalItem.MakeModelID);
+            ViewData["MakeModelID"] = new SelectList(_makeModelOptionRepository.GetAll(), "ID", "Name", rentalItem.MakeModelID);
             ViewData["StatusID"] = new SelectList(_rentalItemStatusRepository.GetAll(), "ID", "Name", rentalItem.StatusID);
             return View(rentalItem);
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace RentalMaster.Models
 {
     public class RentalItemStatus
-    {
+    {   [Key]
         [Display(Name = "Status ID")]
         public int ID { get; set; }
         [Display(Name = "Status")]

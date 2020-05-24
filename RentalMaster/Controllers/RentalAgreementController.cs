@@ -81,19 +81,22 @@ namespace RentalMaster.Controllers
             var rentalAgreement = new RentalAgreement();
             if (ModelState.IsValid)
             {
-                rentalAgreement.CustomerID = rentalAgreementVM.CustomerID;
-                rentalAgreement.Customer = _customerRepository.GetByID(rentalAgreement.CustomerID);
+
 
                 //rentalAgreement.RentalEndDate = null;
                 rentalAgreement.RentalStartDate = rentalAgreementVM.RentalStartDate;
                 rentalAgreement.RentalEndDate = rentalAgreementVM.RentalEndDate;
-                rentalAgreement.RentalItem = _rentalItemRepository.GetByID(rentalAgreement.RentalItemID);
-
-
-
+                rentalAgreement.CustomerID = rentalAgreementVM.CustomerID;
+                rentalAgreement.RentalItemID = rentalAgreementVM.RentalItemID;
 
                 _context.Update(rentalAgreement);
                 await _context.SaveChangesAsync();
+
+                rentalAgreement.RentalItem = _rentalItemRepository.GetByID(rentalAgreement.RentalItemID);
+                rentalAgreement.Customer = _customerRepository.GetByID(rentalAgreement.CustomerID);
+                _context.Update(rentalAgreement);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             else

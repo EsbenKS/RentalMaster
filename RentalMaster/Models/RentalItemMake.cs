@@ -9,6 +9,11 @@ namespace RentalMaster.Models
 {
     public class RentalItemMake
     {
+
+        public RentalItemMake()
+        {
+            RentalItemModels = new List<RentalItemModel>();
+        }
         [Key]
         [Display(Name = "Make ID")]
 
@@ -17,6 +22,7 @@ namespace RentalMaster.Models
         [StringLength(100, MinimumLength = 2)]
         public string Name { get; set; }
         public List<RentalItemModel> RentalItemModels { get; set; }
+
         [NotMapped]
         public int RentalItemModelID { get; set; }
 

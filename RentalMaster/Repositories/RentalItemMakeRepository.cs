@@ -50,35 +50,7 @@ namespace RentalMaster.Repositories
                                 .ToList();       
         }
 
-        public IEnumerable<MakeModelOption> MakeModelOptions()
-        {
-   
-
-            //Truncate Table to delete all old records, and reset the id colum..
-            _appDbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [MakeModelOptions]");
-
-            var NewMakeModelOptions = new List<MakeModelOption>(); 
-
-            var makes = GetAllAsList();
-            foreach (var make in makes)
-            {
-                foreach (var model in make.RentalItemModels)
-                {
-                    var MakeModel = new MakeModelOption();
-                    MakeModel.MakeID = make.ID;
-                    MakeModel.ModelID = model.ID;
-                    MakeModel.Name = make.Name + ' ' + model.Name;
-                    _appDbContext.MakeModelOptions.Add(MakeModel);
-                }
-            }
-            // Add new MakeModelOptions
-            _appDbContext.SaveChanges();
-
-
-            return _appDbContext.MakeModelOptions
-                                .AsNoTracking()
-                                .OrderBy(c => c.Name).ToList(); 
-        }
+      
         public IEnumerable<RentalItem> GetAllWhereUsed(int id)
         {
             return _appDbContext
@@ -93,5 +65,6 @@ namespace RentalMaster.Repositories
             // If you don't just want to know if it in use, but not where.  
             return (GetAllWhereUsed(ModelID).Count() > 0);
         }
+
     }
 }

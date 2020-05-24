@@ -49,7 +49,7 @@ namespace RentalMaster.Controllers
         // GET: RentalItemMake/Create
         public IActionResult Create()
         {
-            ViewData["ModelID"] = new SelectList(_rentalItemModelRepository.GetAll(), "ID", "Name");
+            ViewData["ModelID"] = new SelectList(_rentalItemModelRepository.GetAvailable(), "ID", "Name");
             return View();
         }
 
@@ -76,7 +76,7 @@ namespace RentalMaster.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var rentalItemMake = _rentalItemMakeRepository.GetByID(id);
-            ViewData["ModelID"] = new SelectList(_rentalItemModelRepository.GetAll(), "ID", "Name", rentalItemMake.RentalItemModelID);
+            ViewData["ModelID"] = new SelectList(_rentalItemModelRepository.GetAvailable(), "ID", "Name", rentalItemMake.RentalItemModelID);
             if (rentalItemMake == null)
             {
                 return NotFound();
@@ -144,13 +144,13 @@ namespace RentalMaster.Controllers
         {
    
             var rentalItemMake = _rentalItemMakeRepository.GetByID(id);
-            if (_rentalItemMakeRepository.isMakeInUse(id))
-            {
+            //if (_rentalItemMakeRepository.isMakeInUse(id))
+            //{
 
-                ModelState.AddModelError(string.Empty, "Make is in use. Can't be deleted");
-                return View(rentalItemMake);
+            //    ModelState.AddModelError(string.Empty, "Make is in use. Can't be deleted");
+            //    return View(rentalItemMake);
 
-            }
+            //}
             if (rentalItemMake == null)
             {
                 return NotFound();
@@ -166,13 +166,13 @@ namespace RentalMaster.Controllers
         {
             var rentalItemMake = _rentalItemMakeRepository.GetByID(id);
 
-            if (_rentalItemMakeRepository.isMakeInUse(id))
-            {
+            //if (_rentalItemMakeRepository.isMakeInUse(id))
+            //{
 
-                ModelState.AddModelError(string.Empty, "Make is in use. Can't be deleted");
-                return View(rentalItemMake);
+            //    ModelState.AddModelError(string.Empty, "Make is in use. Can't be deleted");
+            //    return View(rentalItemMake);
 
-            }
+            //}
             // First remove any models connected to this make. 
             if (rentalItemMake.RentalItemModels != null)
             { 

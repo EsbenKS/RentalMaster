@@ -1,4 +1,4 @@
-﻿@model RentalMaster.Models.RentalItem
+﻿@model RentalMaster.Models.RentalItemModel
 
 @{
     ViewData["Title"] = "Details";
@@ -7,7 +7,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>RentalItem</h4>
+    <h4>RentalItemModel</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -21,18 +21,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.MakeID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModelID)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModelID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StatusID)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StatusID)
         </dd>
     </dl>
 </div>

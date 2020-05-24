@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RentalMaster.Repositories;
+using RentalMaster.Services;
 
 namespace RentalMaster
 {
@@ -35,12 +36,16 @@ namespace RentalMaster
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            // Seeder Database services  
+            services.AddTransient<DbSeeder>();
+
             // Repositories
             services.AddTransient<IRentalItemRepository, RentalItemRepository>();
             services.AddTransient<IRentalItemModelRepository, RentalItemModelRepository>();
             services.AddTransient<IRentalItemMakeRepository, RentalItemMakeRepository>();
             services.AddTransient<IRentalItemStatusRepository, RentalItemStatusRepository>();
             services.AddTransient<ICustomerRepository, CustomerRepository>();
+            services.AddTransient<IMakeModelOptionRepository, MakeModelOptionRepository>();
 
 
             services.AddControllersWithViews();

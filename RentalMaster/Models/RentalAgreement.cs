@@ -9,11 +9,11 @@ namespace RentalMaster.Models
 {
     public class RentalAgreement
     {
-        public RentalAgreement()
-        {
-            this.Customer = new Customer();
-            this.RentalItem = new RentalItem();
-        }
+        //public RentalAgreement()
+        //{
+        //    this.Customer = new Customer();
+        //    this.RentalItem = new RentalItem();
+        //}
         public int ID { get; set; }
 
         [DataType(DataType.Date)]

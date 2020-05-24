@@ -26,7 +26,6 @@ namespace RentalMaster.Repositories
         {
             return _appDbContext
                                 .RentalItemModels
-                                .AsNoTracking()
                                 .FirstOrDefault(p => p.ID == RentalItemModelId);
         }
         public RentalItemModel GetByName(string RentalItemModelname)
@@ -59,6 +58,15 @@ namespace RentalMaster.Repositories
         {
             // If you don't just want to know if it in use, but not where.  
             return (GetAllWhereUsed(ModelID).Count() > 0);
+        }
+        public IEnumerable<RentalItemModel> GetAvailable()
+        {
+            // Return only models without make. 
+            return _appDbContext
+                                .RentalItemModels
+                                .Where(p => p.RentalItemMake == null)
+                                .AsNoTracking()
+                                .OrderBy(c => c.Name);
         }
 
 

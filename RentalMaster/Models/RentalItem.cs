@@ -16,10 +16,12 @@ namespace RentalMaster.Models
         public string Name { get; set; }
 
         [Display(Name = "Make")]
+        [ForeignKey("RentalItemMake")]
         public int MakeID { get; set; }
         public RentalItemMake RentalItemMake { get; set; }
 
         [Display(Name = "Model")]
+        [ForeignKey("RentalItemModel")]
         public int ModelID { get; set; }
         public RentalItemModel RentalItemModel { get; set; }
 
@@ -29,9 +31,9 @@ namespace RentalMaster.Models
 
         public ICollection<RentalAgreement> RentalAgreements { get; set; }
 
-
         [NotMapped]
         public int MakeModelID { get; set; }
+
         [NotMapped]
         public MakeModelOption MakeModelOption { get; set; }
         [NotMapped]
