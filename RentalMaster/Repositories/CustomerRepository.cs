@@ -20,7 +20,8 @@ namespace RentalMaster.Repositories
             return _appDbContext
                                 .Customers
                                 .AsNoTracking()
-                                .OrderBy(c => c.FullName);
+                                .OrderBy(c => c.FirstName);
+                                
         }
         public Customer GetByID(int CustomerId)
         {
@@ -42,7 +43,7 @@ namespace RentalMaster.Repositories
             return _appDbContext
                                 .Customers
                                 .AsNoTracking()
-                                .OrderBy(c => c.FullName)
+                                .OrderBy(c => c.FirstName)
                                 .ToList();
         }
     }    

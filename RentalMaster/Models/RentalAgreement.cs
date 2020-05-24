@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -33,6 +34,14 @@ namespace RentalMaster.Models
 
         public Customer Customer { get; set; }
         public RentalItem RentalItem { get; set; }
+        [NotMapped]
+        public string FullName
+        {
+            get
+            {
+                return RentalItem.RentalItemMake.Name + " " + RentalItem.RentalItemModel.Name;
+            }
+        }
 
         public bool isRentalActive()
         {

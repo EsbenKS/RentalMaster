@@ -64,12 +64,9 @@ namespace RentalMaster.Repositories
 
         public IEnumerable<MakeModelOption> GenerateMakeModelOptions()
         {
-   
+            ClearMakeModelOptions();
 
-            //Truncate Table to delete all old records, and reset the id colum..
-            _appDbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [MakeModelOptions]");
-
-            var NewMakeModelOptions = new List<MakeModelOption>(); 
+            var NewMakeModelOptions = new List<MakeModelOption>();
 
             var makes = _rentalItemMakeRepository.GetAllAsList();
             foreach (var make in makes)
@@ -92,7 +89,18 @@ namespace RentalMaster.Repositories
 
             return _appDbContext.MakeModelOptions
                                 .AsNoTracking()
-                                .OrderBy(c => c.Name).ToList(); 
+                                .OrderBy(c => c.Name).ToList();
+
+
         }
+
+
+        public void ClearMakeModelOptions()
+        {
+
+                //Truncate Table to delete all old records, and reset the id colum..
+                _appDbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [MakeModelOptions]");
+            }
+        
     }
 }

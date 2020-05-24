@@ -20,11 +20,13 @@ namespace RentalMaster.Controllers
         private readonly IRentalItemModelRepository _rentalItemModelRepository;
         private readonly IRentalItemRepository _rentalItemRepository;
         private readonly ICustomerRepository _customerRepository;
+        private readonly IRentalAgreementRepository _rentalAgreementRepository;
 
         public RentalAgreementController(ApplicationDbContext context,
                                         IRentalItemModelRepository rentalItemModelRepository,
                                         IRentalItemRepository rentalItemRepository,
                                         ICustomerRepository customerRepository,
+                                        IRentalAgreementRepository rentalAgreementRepository,
                                         IRentalItemMakeRepository rentalItemMakeRepository)
         {
             _context = context;
@@ -32,12 +34,24 @@ namespace RentalMaster.Controllers
             _rentalItemRepository = rentalItemRepository;
             _rentalItemMakeRepository = rentalItemMakeRepository;
             _rentalItemModelRepository = rentalItemModelRepository;
+            _rentalAgreementRepository = rentalAgreementRepository;
         }
         // GET: RentalAgreement
         public async Task<IActionResult> Index()
         {
-            
-            var applicationDbContext = _context.RentalAgreements.Include(r => r.Customer).Include(r => r.RentalItem).OrderBy(a => a.ID);
+            List<RentalAgreement> ra = _context.RentalAgreements.Include(r => r.Customer)
+                                                    .Include(r => r.RentalItem)
+                                                        .ThenInclude(ma => ma.RentalItemMake)
+                                                    .Include(r => r.RentalItem)
+                                                        .ThenInclude(mo => mo.RentalItemModel)
+                                                    .OrderBy(a => a.ID).ToList();
+
+            var applicationDbContext = _context.RentalAgreements.Include(r => r.Customer)
+                                                                .Include(r => r.RentalItem)
+                                                                    .ThenInclude(ma => ma.RentalItemMake)
+                                                                .Include(r => r.RentalItem)
+                                                                    .ThenInclude(mo => mo.RentalItemModel)
+                                                                .OrderBy(a => a.ID);
             return View(applicationDbContext);
         }
 
@@ -69,8 +83,8 @@ namespace RentalMaster.Controllers
             rentalVM.RentalEndDate = DateTime.Now.AddDays(7);
             rentalVM.RentalReturnedDate = null;
 
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "ID", "FullName");
-            ViewData["RentalItemID"] = new SelectList(_context.RentalItems, "ID", "NameMakeModel");
+            ViewData["CustomerID"] = new SelectList(_customerRepository.GetAll(), "ID", "FullName");
+            ViewData["RentalItemID"] = new SelectList(_context.RentalItems, "ID", "Name");
             return View(rentalVM);
         }
 
@@ -88,14 +102,14 @@ namespace RentalMaster.Controllers
                 //rentalAgreement.RentalEndDate = null;
                 rentalAgreement.RentalStartDate = rentalAgreementVM.RentalStartDate;
                 rentalAgreement.RentalEndDate = rentalAgreementVM.RentalEndDate;
+                rentalAgreement.RentalReturnedDate = null;
                 rentalAgreement.CustomerID = rentalAgreementVM.CustomerID;
-                rentalAgreement.RentalItemID = rentalAgreementVM.RentalItemID;
-
-                _context.Update(rentalAgreement);
-                await _context.SaveChangesAsync();
-
-                rentalAgreement.RentalItem = _rentalItemRepository.GetByID(rentalAgreement.RentalItemID);
                 rentalAgreement.Customer = _customerRepository.GetByID(rentalAgreement.CustomerID);
+                rentalAgreement.RentalItemID = rentalAgreementVM.RentalItemID;
+                rentalAgreement.RentalItem = _rentalItemRepository.GetByID(rentalAgreement.RentalItemID);
+
+         
+
                 _context.Update(rentalAgreement);
                 await _context.SaveChangesAsync();
 
@@ -108,7 +122,7 @@ namespace RentalMaster.Controllers
                                        .ToList();
             }
             ViewData["CustomerID"] = new SelectList(_context.Customers, "ID", "FullName", rentalAgreement.CustomerID);
-            ViewData["RentalItemID"] = new SelectList(_context.RentalItems, "ID", "ID", rentalAgreement.RentalItemID);
+            ViewData["RentalItemID"] = new SelectList(_context.RentalItems, "ID", "Name", rentalAgreement.RentalItemID);
             return View(rentalAgreement);
         }
 
@@ -125,8 +139,8 @@ namespace RentalMaster.Controllers
             {
                 return NotFound();
             }
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "ID", "FullName", rentalAgreement.CustomerID);
-            ViewData["RentalItemID"] = new SelectList(_context.RentalItems, "ID", "ID", rentalAgreement.RentalItemID);
+            ViewData["CustomerID"] = new SelectList(_customerRepository.GetAll(), "ID", "FullName", rentalAgreement.CustomerID);
+            ViewData["RentalItemID"] = new SelectList(_context.RentalItems, "ID", "Name", rentalAgreement.RentalItemID);
             return View(rentalAgreement);
         }
 
@@ -162,8 +176,8 @@ namespace RentalMaster.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "ID", "FullName", rentalAgreement.CustomerID);
-            ViewData["RentalItemID"] = new SelectList(_context.RentalItems, "ID", "ID", rentalAgreement.RentalItemID);
+            ViewData["CustomerID"] = new SelectList(_customerRepository.GetAll(), "ID", "FullName", rentalAgreement.CustomerID);
+            ViewData["RentalItemID"] = new SelectList(_context.RentalItems, "ID", "Name", rentalAgreement.RentalItemID);
             return View(rentalAgreement);
         }
 

@@ -12,6 +12,7 @@ namespace RentalMaster.Repositories
         MakeModelOption GetByID(int MakeModelOptionID);
         List<MakeModelOption> GetAllAsList();    
         IEnumerable<MakeModelOption> GenerateMakeModelOptions();
+        void ClearMakeModelOptions(); 
 
 
 

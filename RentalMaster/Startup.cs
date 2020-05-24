@@ -37,6 +37,7 @@ namespace RentalMaster
             services.AddTransient<IRentalItemStatusRepository, RentalItemStatusRepository>();
             services.AddTransient<ICustomerRepository, CustomerRepository>();
             services.AddTransient<IMakeModelOptionRepository, MakeModelOptionRepository>();
+            services.AddTransient<IRentalAgreementRepository, RentalAgreementRepository>();
 
 
             services.AddControllersWithViews();

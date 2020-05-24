@@ -40,14 +40,5 @@ namespace RentalMaster.Models
         [NotMapped]
         public List<MakeModelOption> MakeModelOptions { get; set; }
 
-        [NotMapped]
-        public string NameMakeModel
-        {
-            get
-            {
-                return Name; // + " - " + RentalItemMake.Name + " " + RentalItemModel.Name;
-            }
-        }
-
     }
 }

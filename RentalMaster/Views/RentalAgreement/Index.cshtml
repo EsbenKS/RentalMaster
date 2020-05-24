@@ -8,13 +8,10 @@
 
 <p>
     <th>
-        <a asp-action="Create" class="text-center btn btn-outline-success"><i class="far fa-plus-square"></i>Create New Item</a>
+        <a asp-action="Create" class="text-center btn btn-outline-success"><i class="far fa-plus-square"></i>New Agreement</a>
     </th>
     <th>
         <a asp-controller="Customer" asp-action="Index" class="text-center btn btn-outline-success"><i class="far fa-plus-square"></i> Customers </a>
-    </th>
-    <th>
-        <a asp-controller="Customer" asp-action="Create" class="btn btn-outline-success"><i class="far fa-plus-square"></i> Create Customer </a>
     </th>
     <th>
         <a asp-controller="RentalItem" asp-action="Index" class="btn btn-outline-success"><i class="far fa-plus-square"></i> Rental Items </a>
@@ -30,15 +27,18 @@
                 @Html.DisplayNameFor(model => model.RentalEndDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RentalReturnedDate)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Customer)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.RentalItem)
             </th>
-            <th></th>
+            <th>
+                Make
+            </th>
+            <th>
+                Model
+            </th>
+
         </tr>
     </thead>
     <tbody>
@@ -51,13 +51,16 @@
                 @Html.DisplayFor(modelItem => item.RentalEndDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RentalReturnedDate)
+                @Html.DisplayFor(modelItem => item.Customer.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Customer.Adresse1)
+                @Html.DisplayFor(modelItem => item.RentalItem.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RentalItem.ID)
+                @Html.DisplayFor(modelItem => item.RentalItem.RentalItemMake.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RentalItem.RentalItemModel.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

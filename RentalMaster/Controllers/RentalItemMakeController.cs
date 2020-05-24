@@ -17,14 +17,17 @@ namespace RentalMaster.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IRentalItemMakeRepository _rentalItemMakeRepository;
         private readonly IRentalItemModelRepository _rentalItemModelRepository;
+        private readonly IMakeModelOptionRepository _makeModelOptionRepository;
 
         public RentalItemMakeController(ApplicationDbContext context,
                                         IRentalItemModelRepository rentalItemModelRepository,
+                                        IMakeModelOptionRepository makeModelOptionRepository,
                                         IRentalItemMakeRepository rentalItemMakeRepository)
         {
             _context = context;
             _rentalItemMakeRepository = rentalItemMakeRepository;
             _rentalItemModelRepository = rentalItemModelRepository;
+            _makeModelOptionRepository = makeModelOptionRepository;
         }
 
         // GET: RentalItemMake
@@ -144,13 +147,13 @@ namespace RentalMaster.Controllers
         {
    
             var rentalItemMake = _rentalItemMakeRepository.GetByID(id);
-            //if (_rentalItemMakeRepository.isMakeInUse(id))
-            //{
+            if (_rentalItemMakeRepository.isMakeInUse(id))
+            {
 
-            //    ModelState.AddModelError(string.Empty, "Make is in use. Can't be deleted");
-            //    return View(rentalItemMake);
+                ModelState.AddModelError(string.Empty, "Make is in use. Can't be deleted");
+                return View(rentalItemMake);
 
-            //}
+            }
             if (rentalItemMake == null)
             {
                 return NotFound();
@@ -166,24 +169,27 @@ namespace RentalMaster.Controllers
         {
             var rentalItemMake = _rentalItemMakeRepository.GetByID(id);
 
-            //if (_rentalItemMakeRepository.isMakeInUse(id))
-            //{
+            if (_rentalItemMakeRepository.isMakeInUse(id))
+            {
 
-            //    ModelState.AddModelError(string.Empty, "Make is in use. Can't be deleted");
-            //    return View(rentalItemMake);
+                ModelState.AddModelError(string.Empty, "Make is in use. Can't be deleted");
+                return View(rentalItemMake);
 
-            //}
-            // First remove any models connected to this make. 
+            }
+            
+            //First remove any models connected to this make. 
             if (rentalItemMake.RentalItemModels != null)
-            { 
-             rentalItemMake.RentalItemModels.Clear();
-             _context.RentalItemMakes.Update(rentalItemMake);
-             await _context.SaveChangesAsync();
+            {
+                _makeModelOptionRepository.ClearMakeModelOptions();
+                 rentalItemMake.RentalItemModels.Clear();
+                 _context.RentalItemMakes.Update(rentalItemMake);
+                 await _context.SaveChangesAsync();
             }
 
             // Now delete the make record it self. 
             _context.RentalItemMakes.Remove(rentalItemMake);
             await _context.SaveChangesAsync();
+            _makeModelOptionRepository.GenerateMakeModelOptions();
 
             return RedirectToAction(nameof(Index));
         }

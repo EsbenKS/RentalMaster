@@ -36,11 +36,13 @@ namespace RentalMaster.Repositories
         public IEnumerable<RentalAgreement> GetAll()
         {
             return _appDbContext
-                                .RentalAgreements
-                                .Include(r => r.Customer)
-                                .Include(r => r.RentalItem)
-                                .AsNoTracking()
-                                .OrderBy(c => c.ID);
+                                .RentalAgreements.Include(r => r.Customer)
+                                                                .Include(r => r.RentalItem)
+                                                                    .ThenInclude(ma => ma.RentalItemMake)
+                                                                .Include(r => r.RentalItem)
+                                                                    .ThenInclude(mo => mo.RentalItemModel)
+                                                                .OrderByDescending(c => c.RentalStartDate);
+                                                                
         }
 
         public List<RentalAgreement> AllAgreementsByCustomer(int customerID)
@@ -50,6 +52,10 @@ namespace RentalMaster.Repositories
                                .Where(a => a.CustomerID == customerID)
                                .AsNoTracking()
                                .OrderByDescending(c => c.RentalStartDate)
+                               .Include(r => r.RentalItem)
+                                 .ThenInclude(ma => ma.RentalItemMake)
+                               .Include(r => r.RentalItem)
+                                 .ThenInclude(mo => mo.RentalItemModel)
                                .ToList();
         }
 
@@ -59,7 +65,11 @@ namespace RentalMaster.Repositories
                       .RentalAgreements
                       .Where(a => a.RentalEndDate > DateTime.Now && a.RentalReturnedDate == null)
                       .AsNoTracking()
-                      .OrderByDescending(c => c.RentalStartDate)
+                        .OrderByDescending(c => c.RentalStartDate)
+                        .Include(r => r.RentalItem)
+                            .ThenInclude(ma => ma.RentalItemMake)
+                        .Include(r => r.RentalItem)
+                            .ThenInclude(mo => mo.RentalItemModel)
                       .ToList();
         }
 
@@ -68,8 +78,11 @@ namespace RentalMaster.Repositories
             return _appDbContext
                               .RentalAgreements
                               .Where(a => a.RentalReturnedDate != null)
-                              .AsNoTracking()
-                              .OrderByDescending(c => c.RentalStartDate)
+                               .OrderByDescending(c => c.RentalStartDate)
+                               .Include(r => r.RentalItem)
+                                 .ThenInclude(ma => ma.RentalItemMake)
+                               .Include(r => r.RentalItem)
+                                 .ThenInclude(mo => mo.RentalItemModel)
                               .ToList();
         }
 
