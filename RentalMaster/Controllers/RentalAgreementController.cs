@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using RentalMaster.Data;
 using RentalMaster.Models;
 using RentalMaster.Repositories;
+
 using RentalMaster.ViewModel;
 
 namespace RentalMaster.Controllers
@@ -35,6 +36,7 @@ namespace RentalMaster.Controllers
         // GET: RentalAgreement
         public async Task<IActionResult> Index()
         {
+            
             var applicationDbContext = _context.RentalAgreements.Include(r => r.Customer).Include(r => r.RentalItem).OrderBy(a => a.ID);
             return View(applicationDbContext);
         }

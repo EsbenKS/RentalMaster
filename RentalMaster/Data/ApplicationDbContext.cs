@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RentalMaster.Models;
-
 
 namespace RentalMaster.Data
 {
@@ -33,13 +29,12 @@ namespace RentalMaster.Data
                     .WithOne(a => a.RentalItemMake)
                     .IsRequired(false);
 
-       
-            //modelBuilder.Entity<RentalItem>()
-            //        .HasOne(a => a.RentalItemMake)
-            //        .HasOne(b => b.RentalItemModel)
-            //        .HasOne(c => c.RentalItemStatus);
+            modelBuilder.Seed(); 
+
+         
 
         }
+
 
 
 

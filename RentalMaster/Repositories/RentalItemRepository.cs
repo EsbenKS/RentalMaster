@@ -28,13 +28,14 @@ namespace RentalMaster.Repositories
             var AllItems = _appDbContext.RentalItems
                                    .Include(r => r.RentalItemMake)
                                    .Include(r => r.RentalItemModel)
+                                   .Include(r => r.RentalItemStatus)
                                    .AsNoTracking()
                                    .OrderBy(c => c.Name).ToList(); 
                                  
-            foreach (var item in AllItems)
-            {
-                item.RentalItemStatus = _rentalItemStatusRepository.GetByID(item.StatusID);
-            }
+            //foreach (var item in AllItems)
+            //{
+            //    item.RentalItemStatus = _rentalItemStatusRepository.GetByID(item.StatusID);
+            //}
 
             return AllItems;
       

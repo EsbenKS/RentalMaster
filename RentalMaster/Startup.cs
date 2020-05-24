@@ -1,19 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using RentalMaster.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RentalMaster.Data;
 using RentalMaster.Repositories;
-using RentalMaster.Services;
+
 
 namespace RentalMaster
 {
@@ -35,9 +29,6 @@ namespace RentalMaster
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            // Seeder Database services  
-            services.AddTransient<DbSeeder>();
 
             // Repositories
             services.AddTransient<IRentalItemRepository, RentalItemRepository>();

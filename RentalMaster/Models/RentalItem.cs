@@ -26,6 +26,7 @@ namespace RentalMaster.Models
         public RentalItemModel RentalItemModel { get; set; }
 
         [Display(Name = "Status")]
+        [ForeignKey("RentalItemStatus")]
         public int StatusID { get; set; }
         public RentalItemStatus RentalItemStatus { get; set; }
 
