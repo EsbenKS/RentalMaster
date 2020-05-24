@@ -15,8 +15,7 @@ namespace RentalMaster.Models
         [Display(Name = "Model")]
         [StringLength(100, MinimumLength = 2)]
         public string Name { get; set; }
-       
-        public RentalItemMake RentalItemMake { get; set; }
+        public RentalItemMake  RentalItemMake { get; set; }
         public int MakeID { get; set; }
 
 

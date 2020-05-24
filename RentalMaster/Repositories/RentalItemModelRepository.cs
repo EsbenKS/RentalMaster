@@ -19,6 +19,7 @@ namespace RentalMaster.Repositories
         {
             return _appDbContext
                                 .RentalItemModels
+                                .Include(r => r.RentalItemMake)
                                 .AsNoTracking()
                                 .OrderBy(c => c.Name);
         }
@@ -26,12 +27,14 @@ namespace RentalMaster.Repositories
         {
             return _appDbContext
                                 .RentalItemModels
+                                .Include(r => r.RentalItemMake)
                                 .FirstOrDefault(p => p.ID == RentalItemModelId);
         }
         public RentalItemModel GetByName(string RentalItemModelname)
         {
             return _appDbContext
                                 .RentalItemModels
+                                .Include(r => r.RentalItemMake)
                                 .AsNoTracking()
                                 .FirstOrDefault(p => p.Name == RentalItemModelname);
         }
@@ -40,6 +43,7 @@ namespace RentalMaster.Repositories
             // Sort by name
             return _appDbContext
                                 .RentalItemModels
+                                .Include(r => r.RentalItemMake)
                                 .AsNoTracking()
                                 .OrderBy(c => c.Name)
                                 .ToList();

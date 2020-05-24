@@ -21,7 +21,7 @@ namespace RentalMaster.Repositories
         {
             return _appDbContext
                                 .RentalItemStatuses
-                                .OrderBy(c => c.Name);
+                                .OrderBy(c => c.SortOrder);
         }
         public RentalItemStatus GetByID(int RentalItemStatusId)
         {
@@ -40,7 +40,7 @@ namespace RentalMaster.Repositories
             // Sort by name
             return _appDbContext
                                 .RentalItemStatuses
-                                .OrderBy(c => c.Name)
+                                .OrderBy(c => c.SortOrder)
                                 .ToList();
         }
        
