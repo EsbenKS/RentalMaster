@@ -30,12 +30,13 @@ namespace RentalMaster.Repositories
                                 .AsNoTracking()
                                 .FirstOrDefault(p => p.ID == CustomerId);
         }
-        public Customer GetByName(string Customername)
+        public IEnumerable<Customer> GetByName(string searchStr)
         {
             return _appDbContext
                                 .Customers
                                 .AsNoTracking()
-                                .FirstOrDefault(p => p.FullName == Customername);
+                                .Where(p => p.FirstName.Contains(searchStr)  || p.LastName.Contains(searchStr)) 
+                                .ToList();
         }
         public List<Customer> GetAllAsList()
         {

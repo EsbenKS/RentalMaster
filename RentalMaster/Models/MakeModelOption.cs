@@ -10,6 +10,7 @@ namespace RentalMaster.Models
     {   
         [Key]
         public int ID { get; set; }
+        [Display(Name = "Make and Model")]
         public string Name { get; set; }
         public int MakeID { get; set; }
         public RentalItemMake RentalItemMake { get; set; }

@@ -11,6 +11,6 @@ namespace RentalMaster.Repositories
         IEnumerable<Customer> GetAll();
         Customer GetByID(int CustomerID);
         List<Customer> GetAllAsList();
-        Customer GetByName(string name);
+        IEnumerable<Customer> GetByName(string name);
     }
 }

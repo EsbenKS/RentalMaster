@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RentalMaster.Data;
 using RentalMaster.Models;
+using RentalMaster.Repositories;
 
 namespace RentalMaster.Controllers
 {
@@ -14,17 +15,26 @@ namespace RentalMaster.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public CustomerController(ApplicationDbContext context)
+        private readonly ICustomerRepository _customerRepository;
+      
+
+        public CustomerController(ApplicationDbContext context, ICustomerRepository customerRepository)
         {
             _context = context;
+            _customerRepository = customerRepository;
         }
-
         // GET: Customer
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchString)
         {
-            return View(await _context.Customers.ToListAsync());
+            if (string.IsNullOrWhiteSpace(SearchString))
+            {
+                return View(_customerRepository.GetAll());
+            }
+            else
+            {
+                return View(_customerRepository.GetByName(SearchString));
+            }
         }
-
         // GET: Customer/Details/5
         public async Task<IActionResult> Details(int? id)
         {
