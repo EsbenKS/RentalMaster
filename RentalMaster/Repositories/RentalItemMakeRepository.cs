@@ -31,14 +31,7 @@ namespace RentalMaster.Repositories
                                 .Include(r => r.RentalItemModels)
                                 .FirstOrDefault(p => p.ID == RentalItemMakeId);
         }
-        public RentalItemMake GetByName(string RentalItemMakename)
-        {
-            return _appDbContext
-                                .RentalItemMakes
-                                .Include(r => r.RentalItemModels)
-                                .AsNoTracking()
-                                .FirstOrDefault(p => p.Name == RentalItemMakename);
-        }
+ 
         public List<RentalItemMake> GetAllAsList()
         {
             // Sort by name
@@ -66,5 +59,7 @@ namespace RentalMaster.Repositories
             return (GetAllWhereUsed(ModelID).Count() > 0);
         }
 
+
+  
     }
 }

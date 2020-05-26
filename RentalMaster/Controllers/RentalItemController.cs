@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using RentalMaster.Repositories;
 
 namespace RentalMaster.Controllers
 {
+    [Authorize]
     public class RentalItemController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -38,13 +40,20 @@ namespace RentalMaster.Controllers
             _rentalItemStatusRepository = rentalItemStatusRepository;
             _makeModelOptionRepository = makeModelOptionRepository;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchString)
         {
-           return View(_rentalItemRepository.GetAll());
+
+            if (string.IsNullOrWhiteSpace(SearchString))
+            {
+                return View(_rentalItemRepository.GetAll());
+            }
+            else
+            {
+                return View(_rentalItemRepository.GetByName(SearchString));
+            }
         }
 
-
-        // GET: RentalItem/Create
+            // GET: RentalItem/Create
         public IActionResult Create()
         {
             // Generate MakeModel Options 

@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<RentalMaster.Models.RentalAgreement>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Rental Agreements";
 }
 
 <h1>Index</h1>
 
-<p>
+
     <th>
         <a asp-action="Create" class="text-center btn btn-outline-success"><i class="far fa-plus-square"></i>New Agreement</a>
     </th>
@@ -16,7 +16,18 @@
     <th>
         <a asp-controller="RentalItem" asp-action="Index" class="btn btn-outline-success"><i class="far fa-plus-square"></i> Rental Items </a>
     </th>
-</p>
+
+<hr/>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by: <input type="text" name="SearchString">
+            <input type="submit" value="Search" class="btn btn-default" />
+            <a asp-action="Index" Back to Full list></a>
+        </p>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -38,7 +49,9 @@
             <th>
                 Model
             </th>
-
+            <th>
+               
+            </th>
         </tr>
     </thead>
     <tbody>

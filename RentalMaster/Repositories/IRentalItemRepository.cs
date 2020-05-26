@@ -10,8 +10,9 @@ namespace RentalMaster.Repositories
         IEnumerable<RentalItem> GetAll();
         RentalItem GetByID(int RentalItemID);
         List<RentalItem> GetAllAsList();
-        RentalItem GetByName(string name);
+        IEnumerable<RentalItem> GetByName(string searchStr);
         
+
 
     }
 }

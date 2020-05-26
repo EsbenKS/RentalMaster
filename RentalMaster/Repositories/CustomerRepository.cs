@@ -30,14 +30,7 @@ namespace RentalMaster.Repositories
                                 .AsNoTracking()
                                 .FirstOrDefault(p => p.ID == CustomerId);
         }
-        public IEnumerable<Customer> GetByName(string searchStr)
-        {
-            return _appDbContext
-                                .Customers
-                                .AsNoTracking()
-                                .Where(p => p.FirstName.Contains(searchStr)  || p.LastName.Contains(searchStr)) 
-                                .ToList();
-        }
+   
         public List<Customer> GetAllAsList()
         {
             // Sort by name
@@ -46,6 +39,19 @@ namespace RentalMaster.Repositories
                                 .AsNoTracking()
                                 .OrderBy(c => c.FirstName)
                                 .ToList();
+        }
+
+        public IEnumerable<Customer> GetBySearch(string searchStr)
+        {
+            return _appDbContext
+                      .Customers
+                      .AsNoTracking()
+                      .Where(p => p.FirstName.Contains(searchStr) || 
+                                  p.LastName.Contains(searchStr)  || 
+                                  p.Adresse1.Contains(searchStr)  || 
+                                  p.Adresse2.Contains(searchStr)  || 
+                                  p.PostArea.Contains(searchStr))
+                      .ToList();
         }
     }    
 }

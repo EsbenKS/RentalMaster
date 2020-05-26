@@ -25,19 +25,12 @@ namespace RentalMaster.Repositories
         }
         public IEnumerable<RentalItem> GetAll()
         {
-            var AllItems = _appDbContext.RentalItems
+            return _appDbContext.RentalItems
                                    .Include(r => r.RentalItemMake)
                                    .Include(r => r.RentalItemModel)
                                    .Include(r => r.RentalItemStatus)
                                    .AsNoTracking()
                                    .OrderBy(c => c.Name).ToList(); 
-                                 
-            //foreach (var item in AllItems)
-            //{
-            //    item.RentalItemStatus = _rentalItemStatusRepository.GetByID(item.StatusID);
-            //}
-
-            return AllItems;
       
         }
         public RentalItem GetByID(int RentalItemId)
@@ -49,22 +42,22 @@ namespace RentalMaster.Repositories
                                 .Include(r => r.RentalItemStatus)
                                 .FirstOrDefault(p => p.ID == RentalItemId);
         }
-        public RentalItem GetByName(string name)
-        {
-            return _appDbContext
-                                .RentalItems
-                                 .Include(r => r.RentalItemMake)
-                                 .Include(r => r.RentalItemModel)
-                                 .Include(r => r.RentalItemStatus)
-                                .AsNoTracking()
-                                .FirstOrDefault(p => p.Name == name);
-        }
+   
         public List<RentalItem> GetAllAsList()
         {
             // Sort by name
             return GetAll().ToList(); 
         }
 
-  
+        IEnumerable<RentalItem> IRentalItemRepository.GetByName(string searchStr)
+        {
+            return _appDbContext
+                    .RentalItems
+                     .Include(r => r.RentalItemMake)
+                     .Include(r => r.RentalItemModel)
+                     .Include(r => r.RentalItemStatus)
+                    .AsNoTracking()
+                    .Where(p => p.Name.Contains(searchStr));
+        }
     }
 }

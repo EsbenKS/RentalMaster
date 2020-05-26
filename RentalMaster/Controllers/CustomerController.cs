@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RentalMaster.Data;
 using RentalMaster.Models;
 using RentalMaster.Repositories;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RentalMaster.Controllers
 {
+    [Authorize]
     public class CustomerController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -32,7 +31,7 @@ namespace RentalMaster.Controllers
             }
             else
             {
-                return View(_customerRepository.GetByName(SearchString));
+                return View(_customerRepository.GetBySearch(SearchString));
             }
         }
         // GET: Customer/Details/5

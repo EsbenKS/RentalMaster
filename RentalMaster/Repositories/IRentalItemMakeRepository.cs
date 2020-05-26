@@ -11,7 +11,7 @@ namespace RentalMaster.Repositories
         IEnumerable<RentalItemMake> GetAll();
         RentalItemMake GetByID(int RentalItemMakeID);
         List<RentalItemMake> GetAllAsList();
-        RentalItemMake GetByName(string name);
+   
         IEnumerable<RentalItem> GetAllWhereUsed(int id);
         bool isMakeInUse(int ModelID);
 
