@@ -19,15 +19,25 @@
     </th>
   
 </p>
+<hr/>
 <form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by Name: <input type="text" name="SearchString">
-            <input type="submit" value="Search" class="btn btn-default" />
-            <a asp-action="Index" Back to Full list></a>
-        </p>
-    </div>
+
+    <table>
+        <tr>
+            <td>
+                <label for="SearchString">Find by: </label>
+            </td>
+            <td>
+                <input type="text" name="SearchString" class="input-group-sm">
+            </td>
+            <td>
+                <input type="submit" value="Search" class="btn btn-outline-primary btn-sm " />
+            </td>
+        </tr>
+    </table>
+
 </form>
+
 <table class="table">
     <thead>
         <tr>

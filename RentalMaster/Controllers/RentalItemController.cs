@@ -163,6 +163,14 @@ namespace RentalMaster.Controllers
         public async Task<IActionResult> Delete(int  id)
         {
             var rentalItem = _rentalItemRepository.GetByID(id);
+            if (rentalItem.RentalAgreements.Count > 0)
+            {
+
+                ModelState.AddModelError(string.Empty, "Item is in use on Agreements");
+                return View(rentalItem);
+
+            }
+
             if (rentalItem == null)
             {
                 return NotFound();
@@ -177,6 +185,14 @@ namespace RentalMaster.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var rentalItem = _rentalItemRepository.GetByID(id);
+            if (rentalItem.RentalAgreements.Count > 0)
+            {
+
+                ModelState.AddModelError(string.Empty, "Item is in use on Agreements");
+                ModelState.AddModelError(string.Empty, "Cannot be deleted!");
+                return View(rentalItem);
+
+            }
             _context.RentalItems.Remove(rentalItem);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

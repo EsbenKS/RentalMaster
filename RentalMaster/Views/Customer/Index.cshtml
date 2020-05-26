@@ -6,9 +6,11 @@
 
 <h1>Customers</h1>
 
-
 <th>
-    <a asp-controller="Agreements" asp-action="Index" class="text-center btn btn-outline-success"><i class="far fa-plus-square"></i> Agreememts </a>
+    <a asp-action="Create" class="text-center btn btn-outline-success"><i class="far fa-plus-square"></i>Create</a>
+</th>
+<th>
+    <a asp-controller="RentalAgreement" asp-action="Index" class="text-center btn btn-outline-success"><i class="far fa-plus-square"></i> Agreements </a>
 </th>
 <th>
     <a asp-controller="RentalItem" asp-action="Index" class="btn btn-outline-success"><i class="far fa-plus-square"></i> Rental Items </a>
@@ -16,13 +18,21 @@
 
 <hr />
 <form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by: <input type="text" name="SearchString">
-            <input type="submit" value="Search" class="btn btn-default" />
-            <a asp-action="Index" Back to Full list></a>
-        </p>
-    </div>
+
+    <table>
+        <tr>
+            <td>
+                <label for="SearchString">Find by: </label>
+            </td>
+            <td>
+                <input type="text" name="SearchString" class="input-group-sm">
+            </td>
+            <td>
+                <input type="submit" value="Search" class="btn btn-outline-primary btn-sm " />
+            </td>
+        </tr>
+    </table>
+
 </form>
 <table class="table">
     <thead>
@@ -73,7 +83,8 @@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a> |
+                    <a asp-controller="RentalAgreement" asp-action="Create" asp-route-CustomerID="@item.ID">New Agreement</a>
                 </td>
             </tr>
         }

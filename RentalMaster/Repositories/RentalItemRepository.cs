@@ -29,6 +29,7 @@ namespace RentalMaster.Repositories
                                    .Include(r => r.RentalItemMake)
                                    .Include(r => r.RentalItemModel)
                                    .Include(r => r.RentalItemStatus)
+                                   .Include(a => a.RentalAgreements)
                                    .AsNoTracking()
                                    .OrderBy(c => c.Name).ToList(); 
       
@@ -40,6 +41,7 @@ namespace RentalMaster.Repositories
                                 .Include(r => r.RentalItemMake)
                                 .Include(r => r.RentalItemModel)
                                 .Include(r => r.RentalItemStatus)
+                                .Include(a => a.RentalAgreements)
                                 .FirstOrDefault(p => p.ID == RentalItemId);
         }
    
@@ -56,8 +58,9 @@ namespace RentalMaster.Repositories
                      .Include(r => r.RentalItemMake)
                      .Include(r => r.RentalItemModel)
                      .Include(r => r.RentalItemStatus)
+                     .Include(a => a.RentalAgreements)
                     .AsNoTracking()
-                    .Where(p => p.Name.Contains(searchStr));
+                    .Where(p => p.Name.Contains(searchStr) || p.RentalItemMake.Name.Contains(searchStr) || p.RentalItemModel.Name.Contains(searchStr));
         }
     }
 }

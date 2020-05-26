@@ -4,28 +4,37 @@
     ViewData["Title"] = "Rental Agreements";
 }
 
-<h1>Index</h1>
+    <h1>Rental Agreements</h1>
 
 
-    <th>
-        <a asp-action="Create" class="text-center btn btn-outline-success"><i class="far fa-plus-square"></i>New Agreement</a>
-    </th>
-    <th>
-        <a asp-controller="Customer" asp-action="Index" class="text-center btn btn-outline-success"><i class="far fa-plus-square"></i> Customers </a>
-    </th>
-    <th>
-        <a asp-controller="RentalItem" asp-action="Index" class="btn btn-outline-success"><i class="far fa-plus-square"></i> Rental Items </a>
-    </th>
+<th>
+    <a asp-action="Create" class="text-center btn btn-outline-success"><i class="far fa-plus-square"></i>New Agreement</a>
+</th>
+<th>
+    <a asp-controller="Customer" asp-action="Index" class="text-center btn btn-outline-success"><i class="far fa-plus-square"></i> Customers </a>
+</th>
+<th>
+    <a asp-controller="RentalItem" asp-action="Index" class="btn btn-outline-success"><i class="far fa-plus-square"></i> Rental Items </a>
+</th>
 
-<hr/>
+<hr />
+
 <form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by: <input type="text" name="SearchString">
-            <input type="submit" value="Search" class="btn btn-default" />
-            <a asp-action="Index" Back to Full list></a>
-        </p>
-    </div>
+
+    <table>
+        <tr>
+            <td>
+                <label for="SearchString">Find by: </label>
+            </td>
+            <td>
+                <input type="text" name="SearchString" class="input-group-sm">
+            </td>
+            <td>
+                <input type="submit" value="Search" class="btn btn-outline-primary btn-sm " />
+            </td>
+        </tr>
+    </table>
+
 </form>
 
 <table class="table">
@@ -50,37 +59,38 @@
                 Model
             </th>
             <th>
-               
+
             </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RentalStartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RentalEndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RentalItem.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RentalItem.RentalItemMake.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RentalItem.RentalItemModel.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RentalStartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RentalEndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RentalItem.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RentalItem.RentalItemMake.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RentalItem.RentalItemModel.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

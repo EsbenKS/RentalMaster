@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RentalMaster.Data;
 using RentalMaster.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,6 +18,7 @@ namespace RentalMaster.Repositories
         {
             return _appDbContext
                                 .Customers
+                                .Include(a => a.RentalAgreements)
                                 .AsNoTracking()
                                 .OrderBy(c => c.FirstName);
                                 
@@ -27,6 +27,7 @@ namespace RentalMaster.Repositories
         {
             return _appDbContext
                                 .Customers
+                                .Include(a => a.RentalAgreements)
                                 .AsNoTracking()
                                 .FirstOrDefault(p => p.ID == CustomerId);
         }
@@ -36,6 +37,7 @@ namespace RentalMaster.Repositories
             // Sort by name
             return _appDbContext
                                 .Customers
+                                  .Include(a => a.RentalAgreements)
                                 .AsNoTracking()
                                 .OrderBy(c => c.FirstName)
                                 .ToList();
@@ -45,6 +47,7 @@ namespace RentalMaster.Repositories
         {
             return _appDbContext
                       .Customers
+                        .Include(a => a.RentalAgreements)
                       .AsNoTracking()
                       .Where(p => p.FirstName.Contains(searchStr) || 
                                   p.LastName.Contains(searchStr)  || 

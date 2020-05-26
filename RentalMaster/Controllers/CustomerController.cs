@@ -35,15 +35,10 @@ namespace RentalMaster.Controllers
             }
         }
         // GET: Customer/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.ID == id);
+         
+            var customer = _customerRepository.GetByID(id);
             if (customer == null)
             {
                 return NotFound();
@@ -75,14 +70,11 @@ namespace RentalMaster.Controllers
         }
 
         // GET: Customer/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+   
 
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = _customerRepository.GetByID(id);
             if (customer == null)
             {
                 return NotFound();
@@ -126,15 +118,17 @@ namespace RentalMaster.Controllers
         }
 
         // GET: Customer/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
+    
+            var customer = _customerRepository.GetByID(id); 
+            if (customer.RentalAgreements.Count > 0)
             {
-                return NotFound();
-            }
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.ID == id);
+                ModelState.AddModelError(string.Empty, "Customer has Agreements");
+                return View(customer);
+
+            }
             if (customer == null)
             {
                 return NotFound();
@@ -148,7 +142,15 @@ namespace RentalMaster.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = _customerRepository.GetByID(id);
+            if (customer.RentalAgreements.Count > 0)
+            {
+
+                ModelState.AddModelError(string.Empty, "Customer has Agreements"); 
+                ModelState.AddModelError(string.Empty, "Cannot be deleted!");
+                return View(customer);
+
+            }
             _context.Customers.Remove(customer);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
