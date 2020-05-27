@@ -32,8 +32,12 @@
             <td>
                 <input type="submit" value="Search" class="btn btn-outline-primary btn-sm " />
             </td>
+
         </tr>
+        
+
     </table>
+    <br />
 
 </form>
 
@@ -88,7 +92,8 @@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a> |
+                    <a asp-action="Return" asp-route-id="@item.ID">Return</a>
                 </td>
             </tr>
         }

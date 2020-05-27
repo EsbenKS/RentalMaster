@@ -10,6 +10,13 @@ namespace RentalMaster.Models
 {
     public class RentalItem
     {
+        public RentalItem()
+        {
+            RentalItemStatus = new RentalItemStatus();
+            RentalItemModel = new RentalItemModel();
+            RentalItemMake = new RentalItemMake(); 
+
+        }
         [Key]
         public int ID { get; set; }
         [StringLength(100, MinimumLength = 2)]
@@ -39,6 +46,16 @@ namespace RentalMaster.Models
         public MakeModelOption MakeModelOption { get; set; }
         [NotMapped]
         public List<MakeModelOption> MakeModelOptions { get; set; }
+
+       
+        [NotMapped]
+        public string FullName
+        {
+            get
+            {
+                return Name + " : " + RentalItemMake.Name + " " + RentalItemModel.Name;
+            }
+        }
 
     }
 }

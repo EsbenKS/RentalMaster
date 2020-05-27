@@ -10,11 +10,7 @@ namespace RentalMaster.Models
 {
     public class RentalAgreement
     {
-        //public RentalAgreement()
-        //{
-        //    this.Customer = new Customer();
-        //    this.RentalItem = new RentalItem();
-        //}
+    
         public int ID { get; set; }
 
         [DataType(DataType.Date)]
@@ -34,15 +30,7 @@ namespace RentalMaster.Models
 
         public Customer Customer { get; set; }
         public RentalItem RentalItem { get; set; }
-        [NotMapped]
-        public string FullName
-        {
-            get
-            {
-                return RentalItem.RentalItemMake.Name + " " + RentalItem.RentalItemModel.Name;
-            }
-        }
-
+        
         public bool isRentalActive()
         {
             return RentalReturnedDate == DateTime.MinValue || RentalReturnedDate == null;
@@ -53,5 +41,8 @@ namespace RentalMaster.Models
             // Return true if Enddate is later than now - else false. 
             return RentalEndDate < DateTime.Now && isRentalActive();
         }
+
+        [NotMapped]
+        public String FullMakeModelName { get; set; }
     }
 }

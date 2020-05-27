@@ -20,8 +20,11 @@ namespace RentalMaster.Repositories
         {
             return _appDbContext
                                .RentalAgreements
-                               .Include(r => r.Customer)
-                               .Include(r => r.RentalItem)
+                                .Include(r => r.Customer)
+                                .Include(r => r.RentalItem)
+                                 .ThenInclude(ma => ma.RentalItemMake)
+                                .Include(r => r.RentalItem)
+                                 .ThenInclude(mo => mo.RentalItemModel)
                                .AsNoTracking()
                                .FirstOrDefault(p => p.ID == rentalAgreementID);
         }
@@ -32,11 +35,12 @@ namespace RentalMaster.Repositories
             return GetAll().ToList();
         }
 
-
-        public IEnumerable<RentalAgreement> GetAll()
+        public IEnumerable<RentalAgreement> GetAllActive()
         {
             return _appDbContext
-                                .RentalAgreements.Include(r => r.Customer)
+                                .RentalAgreements
+                                .Where(a => a.RentalReturnedDate == null)
+                                .Include(r => r.Customer)
                                 .Include(r => r.RentalItem)
                                  .ThenInclude(ma => ma.RentalItemMake)
                                 .Include(r => r.RentalItem)
@@ -44,48 +48,16 @@ namespace RentalMaster.Repositories
                                 .OrderByDescending(c => c.RentalStartDate);
         }
 
-        public List<RentalAgreement> AllAgreementsByCustomer(int customerID)
+        public IEnumerable<RentalAgreement> GetAll()
         {
             return _appDbContext
-                               .RentalAgreements
-                               .Where(a => a.CustomerID == customerID)
-                               .AsNoTracking()
-                               .OrderByDescending(c => c.RentalStartDate)
-                               .Include(r => r.Customer)
-                               .Include(r => r.RentalItem)
+                                .RentalAgreements
+                                .Include(r => r.Customer)
+                                .Include(r => r.RentalItem)
                                  .ThenInclude(ma => ma.RentalItemMake)
-                               .Include(r => r.RentalItem)
+                                .Include(r => r.RentalItem)
                                  .ThenInclude(mo => mo.RentalItemModel)
-                               .ToList();
-        }
-
-        public List<RentalAgreement> ActiveAgreementsByCustomer(int CustomerID)
-        {
-            return _appDbContext
-                      .RentalAgreements
-                      .Where(a => a.RentalEndDate > DateTime.Now && a.RentalReturnedDate == null)
-                      .AsNoTracking()
-                        .OrderByDescending(c => c.RentalStartDate)
-                        .Include(r => r.Customer)
-                        .Include(r => r.RentalItem)
-                            .ThenInclude(ma => ma.RentalItemMake)
-                        .Include(r => r.RentalItem)
-                            .ThenInclude(mo => mo.RentalItemModel)
-                      .ToList();
-        }
-
-        public List<RentalAgreement> PreviousAgreementsByCustomer(int CustomerID)
-        {
-            return _appDbContext
-                              .RentalAgreements
-                              .Where(a => a.RentalReturnedDate != null)
-                               .OrderByDescending(c => c.RentalStartDate)
-                               .Include(r => r.Customer)
-                               .Include(r => r.RentalItem)
-                                 .ThenInclude(ma => ma.RentalItemMake)
-                               .Include(r => r.RentalItem)
-                                 .ThenInclude(mo => mo.RentalItemModel)
-                              .ToList();
+                                .OrderByDescending(c => c.RentalStartDate);
         }
 
         public IEnumerable<RentalAgreement> GetByName(string searchStr)

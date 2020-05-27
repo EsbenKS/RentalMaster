@@ -41,10 +41,10 @@ namespace RentalMaster.Controllers
         // GET: RentalAgreement
         public async Task<IActionResult> Index(string SearchString)
         {
-
+            var xtea = _rentalAgreementRepository.GetAllActive().ToList(); 
             if (string.IsNullOrWhiteSpace(SearchString))
             {
-                return View(_rentalAgreementRepository.GetAll());
+                return View(_rentalAgreementRepository.GetAllActive());
             }
             else
             {
@@ -88,7 +88,7 @@ namespace RentalMaster.Controllers
             rentalVM.RentalEndDate = DateTime.Now.AddDays(7);
             rentalVM.RentalReturnedDate = null;
 
-            ViewData["RentalItemID"] = new SelectList(_rentalItemRepository.GetAll(), "ID", "Name");
+            ViewData["RentalItemID"] = new SelectList(_rentalItemRepository.GetAllReady(), "ID", "FullName");
             return View(rentalVM);
         }
 
@@ -98,7 +98,23 @@ namespace RentalMaster.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(RentalAgreementVM rentalAgreementVM)
         {
+            ViewData["CustomerID"] = new SelectList(_customerRepository.GetAll(), "ID", "FullName", rentalAgreementVM.CustomerID);
+            ViewData["RentalItemID"] = new SelectList(_rentalItemRepository.GetAllReady(), "ID", "FullName", rentalAgreementVM.RentalItemID);
             var rentalAgreement = new RentalAgreement();
+
+
+            if (rentalAgreementVM.RentalStartDate.Date < DateTime.Now.Date)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid start date");
+                return View(rentalAgreementVM);
+            }
+
+            if (rentalAgreementVM.RentalStartDate.Date > rentalAgreementVM.RentalEndDate.Date)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid date range");
+                return View(rentalAgreementVM);
+            }
+
             if (ModelState.IsValid)
             {
 
@@ -122,8 +138,7 @@ namespace RentalMaster.Controllers
                                        .Where(y => y.Count > 0)
                                        .ToList();
             }
-            ViewData["CustomerID"] = new SelectList(_customerRepository.GetAll(), "ID", "FullName", rentalAgreement.CustomerID);
-            ViewData["RentalItemID"] = new SelectList(_rentalItemRepository.GetAll(), "ID", "Name", rentalAgreement.RentalItemID);
+
             return View(rentalAgreement);
         }
 
@@ -141,7 +156,7 @@ namespace RentalMaster.Controllers
                 return NotFound();
             }
             ViewData["CustomerID"] = new SelectList(_customerRepository.GetAll(), "ID", "FullName", rentalAgreement.CustomerID);
-            ViewData["RentalItemID"] = new SelectList(_rentalItemRepository.GetAll(), "ID", "Name", rentalAgreement.RentalItemID);
+            ViewData["RentalItemID"] = new SelectList(_rentalItemRepository.GetAllReady(), "ID", "FullName", rentalAgreement.RentalItemID);
             return View(rentalAgreement);
         }
 
@@ -150,13 +165,22 @@ namespace RentalMaster.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,RentalStartDate,RentalEndDate,RentalReturnedDate,CustomerID,RentalItemID")] RentalAgreement rentalAgreement)
+        public async Task<IActionResult> Edit(RentalAgreement rentalAgreement)
         {
-            if (id != rentalAgreement.ID)
+            ViewData["CustomerID"] = new SelectList(_customerRepository.GetAll(), "ID", "FullName", rentalAgreement.CustomerID);
+            ViewData["RentalItemID"] = new SelectList(_rentalItemRepository.GetAllReady(), "ID", "FullName", rentalAgreement.RentalItemID);
+
+            if (rentalAgreement.RentalStartDate.Date < DateTime.Now.Date)
             {
-                return NotFound();
+                ModelState.AddModelError(string.Empty, "Invalid start date");
+                return View();
             }
 
+            if (rentalAgreement.RentalStartDate.Date > rentalAgreement.RentalEndDate.Date)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid date range");
+                return View();
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -177,23 +201,27 @@ namespace RentalMaster.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerID"] = new SelectList(_customerRepository.GetAll(), "ID", "FullName", rentalAgreement.CustomerID);
-            ViewData["RentalItemID"] = new SelectList(_rentalItemRepository.GetAll(), "ID", "Name", rentalAgreement.RentalItemID);
+          
             return View(rentalAgreement);
         }
 
         // GET: RentalAgreement/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var rentalAgreement = await _context.RentalAgreements
-                .Include(r => r.Customer)
-                .Include(r => r.RentalItem)
-                .FirstOrDefaultAsync(m => m.ID == id);
+            var rentalAgreement = _rentalAgreementRepository.GetByID(id);
+            if (rentalAgreement.isRentalActive())
+            {
+
+                ModelState.AddModelError(string.Empty, "Agreement is active!");
+                return View(rentalAgreement);
+
+            }
+
             if (rentalAgreement == null)
             {
                 return NotFound();
@@ -207,12 +235,58 @@ namespace RentalMaster.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var rentalAgreement = await _context.RentalAgreements.FindAsync(id);
+            var rentalAgreement = _rentalAgreementRepository.GetByID(id);
+            if (rentalAgreement.isRentalActive())
+            {
+
+                ModelState.AddModelError(string.Empty, "Agreement is active!");
+                ModelState.AddModelError(string.Empty, "Item must be returned before deleting the agreement!");
+
+                return View(rentalAgreement);
+
+            }
             _context.RentalAgreements.Remove(rentalAgreement);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        // GET: RentalAgreement/Return/5
+        public async Task<IActionResult> Return(int id)
+        {
 
+            var rentalAgreement = _rentalAgreementRepository.GetByID(id);
+            if (rentalAgreement.RentalReturnedDate != null)
+            {
+
+                ModelState.AddModelError(string.Empty, "Item is already returned!");
+                return View(rentalAgreement);
+
+            }
+
+            if (rentalAgreement == null)
+            {
+                return NotFound();
+            }
+
+            return View(rentalAgreement);
+        }
+
+        // POST: RentalAgreement/Delete/5
+        [HttpPost, ActionName("Return")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReturnConfirmed(int id)
+        {
+            var rentalAgreement = _rentalAgreementRepository.GetByID(id);
+            if (rentalAgreement.RentalReturnedDate != null)
+            {
+                ModelState.AddModelError(string.Empty, "Item is already returned!");
+                return View(rentalAgreement);
+            }
+            rentalAgreement.RentalReturnedDate = DateTime.Now; 
+            _context.RentalAgreements.Update(rentalAgreement);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        //  -- 
         private bool RentalAgreementExists(int id)
         {
             return _context.RentalAgreements.Any(e => e.ID == id);

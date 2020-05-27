@@ -34,6 +34,18 @@ namespace RentalMaster.Repositories
                                    .OrderBy(c => c.Name).ToList(); 
       
         }
+        public IEnumerable<RentalItem> GetAllReady()
+        {
+            return _appDbContext.RentalItems
+                                   .Include(r => r.RentalItemMake)
+                                   .Include(r => r.RentalItemModel)
+                                   .Include(r => r.RentalItemStatus)
+                                   .Include(a => a.RentalAgreements)
+                                   .Where(s => s.RentalItemStatus.ID == 1)
+                                   .AsNoTracking()
+                                   .OrderBy(c => c.Name).ToList();
+
+        }
         public RentalItem GetByID(int RentalItemId)
         {
             return _appDbContext

@@ -8,11 +8,10 @@ namespace RentalMaster.Repositories
     public interface IRentalAgreementRepository
     {
         IEnumerable<RentalAgreement> GetAll();
+        IEnumerable<RentalAgreement> GetAllActive();
         List<RentalAgreement> GetAllAsList();
         RentalAgreement GetByID(int RentalAgreementID);
         IEnumerable<RentalAgreement> GetByName(string searchStr);
-        List<RentalAgreement> AllAgreementsByCustomer(int CustomerID);
-        List<RentalAgreement> ActiveAgreementsByCustomer(int CustomerID);
-        List<RentalAgreement> PreviousAgreementsByCustomer(int CustomerID);
+
     }
 }

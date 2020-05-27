@@ -1,12 +1,12 @@
 ﻿@model RentalMaster.Models.RentalAgreement
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Return item";
 }
 
-<h1>Delete</h1>
+<h1>Return</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to return this?</h3>
 <div>
     <h4>RentalAgreement</h4>
     <hr />
@@ -50,9 +50,9 @@
         </dd>
     </dl>
 
-    <form asp-action="Delete">
+    <form asp-action="Return">
         <input type="hidden" asp-for="ID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <input type="submit" value="Return" class="btn btn-info" /> |
         <a asp-action="Index">Back to List</a>
     </form>
 </div>
