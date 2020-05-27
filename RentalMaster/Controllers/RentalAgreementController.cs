@@ -156,19 +156,18 @@ namespace RentalMaster.Controllers
                 return NotFound();
             }
             ViewData["CustomerID"] = new SelectList(_customerRepository.GetAll(), "ID", "FullName", rentalAgreement.CustomerID);
-            ViewData["RentalItemID"] = new SelectList(_rentalItemRepository.GetAllReady(), "ID", "FullName", rentalAgreement.RentalItemID);
+            ViewData["RentalItemID"] = new SelectList(_rentalItemRepository.GetAll(), "ID", "FullName", rentalAgreement.RentalItemID);
             return View(rentalAgreement);
         }
 
         // POST: RentalAgreement/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(RentalAgreement rentalAgreement)
         {
             ViewData["CustomerID"] = new SelectList(_customerRepository.GetAll(), "ID", "FullName", rentalAgreement.CustomerID);
-            ViewData["RentalItemID"] = new SelectList(_rentalItemRepository.GetAllReady(), "ID", "FullName", rentalAgreement.RentalItemID);
+            ViewData["RentalItemID"] = new SelectList(_rentalItemRepository.GetAll(), "ID", "FullName", rentalAgreement.RentalItemID);
 
             if (rentalAgreement.RentalStartDate.Date < DateTime.Now.Date)
             {

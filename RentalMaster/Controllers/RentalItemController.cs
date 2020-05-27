@@ -101,7 +101,7 @@ namespace RentalMaster.Controllers
         // GET: RentalItem/Edit/5
         public async Task<IActionResult> Edit(int  id)
         {
-            var rentalItem = await _context.RentalItems.FindAsync(id);
+            var rentalItem = _rentalItemRepository.GetByID(id);
             if (rentalItem == null)
             {
                 return NotFound();
@@ -115,12 +115,9 @@ namespace RentalMaster.Controllers
         // POST: RentalItem/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,MakeID,ModelID,StatusID")] RentalItem rentalItem)
+        public async Task<IActionResult> Edit(RentalItem rentalItem)
         {
-            if (id != rentalItem.ID)
-            {
-                return NotFound();
-            }
+      
             ViewData["StatusID"] = new SelectList(_rentalItemStatusRepository.GetAll(), "ID", "Name", rentalItem.StatusID);
             ViewData["MakeID"] = new SelectList(_rentalItemMakeRepository.GetAll(), "ID", "Name", rentalItem.MakeID);
             ViewData["ModelID"] = new SelectList(_rentalItemModelRepository.GetAll(), "ID", "Name", rentalItem.ModelID);
@@ -137,6 +134,9 @@ namespace RentalMaster.Controllers
             {
                 try
                 {
+                    rentalItem.RentalItemMake = _rentalItemMakeRepository.GetByID(rentalItem.MakeID);
+                    rentalItem.RentalItemModel = _rentalItemModelRepository.GetByID(rentalItem.ModelID);
+                    rentalItem.RentalItemStatus = _rentalItemStatusRepository.GetByID(rentalItem.StatusID);
                     _context.Update(rentalItem);
                     await _context.SaveChangesAsync();
                 }
